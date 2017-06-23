@@ -26,7 +26,7 @@ public class CertNoValidator {
     private static final Pattern NORMAL_YEAR_18_PATTERN = Pattern.compile("^[1-9][0-9]{5}[1-9][0-9]{3}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|1[0-9]|2[0-8]))[0-9]{3}[0-9Xx]$");
 
     // 18位身份证号校验位校验信息
-    private static final int[] VERIFY_WEIGHTS = {7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2};
+    private static final int[] VERIFY_FACTOR = {7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2};
     private static final String VERIFY_CODES = "10X98765432";
 
     /**
@@ -132,7 +132,7 @@ public class CertNoValidator {
         // 校验校验位
         int sum = 0;
         for (int i = 0; i < 17; i++) {
-            sum += (certNo.charAt(i) - 48) * VERIFY_WEIGHTS[i];
+            sum += (certNo.charAt(i) - 48) * VERIFY_FACTOR[i];
         }
         int index = sum % 11;
         return VERIFY_CODES.charAt(index) == certNo.charAt(17);
