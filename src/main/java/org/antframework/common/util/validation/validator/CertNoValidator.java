@@ -86,7 +86,7 @@ public class CertNoValidator {
             return false;
         }
         // 校验地区
-        if (!CERT_NO_AREA_MAPPING.containsKey(certNo.substring(0, 2))) {
+        if (certNo.length() < 2 || !CERT_NO_AREA_MAPPING.containsKey(certNo.substring(0, 2))) {
             return false;
         }
 

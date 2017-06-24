@@ -50,11 +50,15 @@ public class MaskFieldFormatter implements FieldFormatter {
     @Override
     public String format(Object obj) {
         String maskedStr;
-        if (allMask) {
-            maskedStr = allMaskStr;
+        String str = (String) ReflectionUtils.getField(field, obj);
+        if (str == null) {
+            maskedStr = null;
         } else {
-            String str = (String) ReflectionUtils.getField(field, obj);
-            maskedStr = mask(str);
+            if (allMask) {
+                maskedStr = allMaskStr;
+            } else {
+                maskedStr = mask(str);
+            }
         }
 
         return formattedFieldPre + maskedStr;
