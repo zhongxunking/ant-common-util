@@ -19,45 +19,30 @@ public class ToStringTest {
 
     @Test
     public void testMask() {
-        User user = new User("zhongxun", 17, "220112198309083907");
+        User user = new User("zhongxun",
+                17,
+                "123456",
+                "15082119920706049X",
+                "18949141125");
         System.out.println(user);
-
     }
 
     public static class User {
         private String name;
         private int age;
-        @Mask
+        @Mask(allMask = true)
         private String password;
+        @Mask
+        private String certNo;
+        @Mask
+        private String mobileNo;
 
-        public User(String name, int age, String password) {
+        public User(String name, int age, String password, String certNo, String mobileNo) {
             this.name = name;
             this.age = age;
             this.password = password;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public int getAge() {
-            return age;
-        }
-
-        public void setAge(int age) {
-            this.age = age;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
+            this.certNo = certNo;
+            this.mobileNo = mobileNo;
         }
 
         @Override

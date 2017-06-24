@@ -10,6 +10,7 @@ package org.antframework.common.util.tostring.format;
 
 import org.antframework.common.util.tostring.FieldFormatter;
 import org.antframework.common.util.validation.validator.CertNoValidator;
+import org.antframework.common.util.validation.validator.MobileNoValidator;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.util.ReflectionUtils;
 
@@ -67,8 +68,12 @@ public class MaskFieldFormatter implements FieldFormatter {
     // 自动判断需掩码部分
     private String mask(String str) {
         if (CertNoValidator.validate(str)) {
-            // 身份证号保留前1、后1
+            // 身份证号明文：前1、后1
             return MaskUtil.mask(str, 1, 1, maskChar);
+        }
+        if (MobileNoValidator.validate(str)) {
+            // 手机号明文：前3、后4
+            return MaskUtil.mask(str, 3, 4, maskChar);
         } else {
             // 无法识别的信息，采用全部掩码
             return MaskUtil.mask(str, 0, 0, maskChar);

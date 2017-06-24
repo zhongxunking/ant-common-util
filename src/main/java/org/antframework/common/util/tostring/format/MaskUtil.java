@@ -20,7 +20,7 @@ public class MaskUtil {
      *
      * @param str       需被淹吗的字符串
      * @param startSize 前段明文长度
-     * @param endSize   后段明文长度
+     * @param endSize   末段明文长度
      * @return 掩码后的字符串
      * @throws IllegalArgumentException startSize小于0或endSize小于0
      */
@@ -33,7 +33,7 @@ public class MaskUtil {
      *
      * @param str       需被淹吗的字符串
      * @param startSize 前段明文长度
-     * @param endSize   后段明文长度
+     * @param endSize   末段明文长度
      * @param maskChar  掩码字符
      * @return 掩码后的字符串
      * @throws IllegalArgumentException startSize小于0或endSize小于0
@@ -58,7 +58,7 @@ public class MaskUtil {
         for (int i = startSize; i < maskEndIndex; i++) {
             builder.append(maskChar);
         }
-        // 构造后段明文
+        // 构造末段明文
         builder.append(str.substring(maskEndIndex));
 
         return builder.toString();
