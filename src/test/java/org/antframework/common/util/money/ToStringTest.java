@@ -26,7 +26,8 @@ public class ToStringTest {
                 "18949141125",
                 "abcde@163.com",
                 "6228480402637874213",
-                "91371600MA3DQC9148");
+                "91371600MA3DQC9148",
+                "asd&$7f23");
         System.out.println(user);
     }
 
@@ -45,8 +46,10 @@ public class ToStringTest {
         private String bankCardNo;
         @Mask
         private String organizationCode;
+        @Mask
+        private String unrecognize;
 
-        public User(String name, int age, String password, String certNo, String mobileNo, String email, String bankCardNo, String organizationCode) {
+        public User(String name, int age, String password, String certNo, String mobileNo, String email, String bankCardNo, String organizationCode, String unrecognize) {
             this.name = name;
             this.age = age;
             this.password = password;
@@ -55,6 +58,7 @@ public class ToStringTest {
             this.email = email;
             this.bankCardNo = bankCardNo;
             this.organizationCode = organizationCode;
+            this.unrecognize = unrecognize;
         }
 
         @Override

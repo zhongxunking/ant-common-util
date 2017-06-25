@@ -57,7 +57,7 @@ public class MaskFieldFormatter implements FieldFormatter {
             if (allMask) {
                 maskedStr = allMaskStr;
             } else {
-                maskedStr = mask(str);
+                maskedStr = autoMask(str);
             }
         }
 
@@ -65,7 +65,7 @@ public class MaskFieldFormatter implements FieldFormatter {
     }
 
     // 自动判断需掩码部分
-    private String mask(String str) {
+    private String autoMask(String str) {
         if (CertNoValidator.validate(str)) {
             // 身份证号明文：前1、后1
             return MaskUtil.mask(str, 1, 1, maskChar);
