@@ -9,10 +9,7 @@
 package org.antframework.common.util.tostring.format;
 
 import org.antframework.common.util.tostring.FieldFormatter;
-import org.antframework.common.util.validation.validator.BankCarNoValidator;
-import org.antframework.common.util.validation.validator.CertNoValidator;
-import org.antframework.common.util.validation.validator.EmailValidator;
-import org.antframework.common.util.validation.validator.MobileNoValidator;
+import org.antframework.common.util.validation.validator.*;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.util.ReflectionUtils;
 
@@ -87,6 +84,9 @@ public class MaskFieldFormatter implements FieldFormatter {
         } else if (BankCarNoValidator.validate(str)) {
             // 银行卡号明文：前6、后4
             return MaskUtil.mask(str, 6, 4, maskChar);
+        } else if (OrganizationCodeValidator.validate(str)) {
+            // 组织机构代码明文：前1、后3
+            return MaskUtil.mask(str, 1, 3, maskChar);
         } else {
             // 无法识别的信息，采用全部掩码
             return MaskUtil.mask(str, 0, 0, maskChar);
