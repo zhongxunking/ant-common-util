@@ -23,7 +23,8 @@ public class ToStringTest {
                 17,
                 "123456",
                 "15082119920706049X",
-                "18949141125");
+                "18949141125",
+                "@163.com");
         System.out.println(user);
     }
 
@@ -36,13 +37,16 @@ public class ToStringTest {
         private String certNo;
         @Mask
         private String mobileNo;
+        @Mask
+        private String email;
 
-        public User(String name, int age, String password, String certNo, String mobileNo) {
+        public User(String name, int age, String password, String certNo, String mobileNo, String email) {
             this.name = name;
             this.age = age;
             this.password = password;
             this.certNo = certNo;
             this.mobileNo = mobileNo;
+            this.email = email;
         }
 
         @Override

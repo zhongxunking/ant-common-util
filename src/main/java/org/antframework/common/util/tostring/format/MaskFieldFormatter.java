@@ -10,6 +10,7 @@ package org.antframework.common.util.tostring.format;
 
 import org.antframework.common.util.tostring.FieldFormatter;
 import org.antframework.common.util.validation.validator.CertNoValidator;
+import org.antframework.common.util.validation.validator.EmailValidator;
 import org.antframework.common.util.validation.validator.MobileNoValidator;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.util.ReflectionUtils;
@@ -74,6 +75,14 @@ public class MaskFieldFormatter implements FieldFormatter {
         if (MobileNoValidator.validate(str)) {
             // 手机号明文：前3、后4
             return MaskUtil.mask(str, 3, 4, maskChar);
+        } else if (EmailValidator.validate(str)) {
+            // 邮箱掩码，掩码前：zhongxunking@163.com，掩码后：zho******ing@163.com
+            int localUnmaskSize = str.indexOf('@') / 2;
+            int endSize = localUnmaskSize / 2;
+            int startSize = localUnmaskSize - endSize;
+            endSize += str.length() - str.indexOf('@');
+
+            return MaskUtil.mask(str, startSize, endSize, maskChar);
         } else {
             // 无法识别的信息，采用全部掩码
             return MaskUtil.mask(str, 0, 0, maskChar);
