@@ -29,5 +29,4 @@ public class BankCarNoValidator {
         }
         return BANK_CARD_NO_PATTERN.matcher(bankCardNo).matches();
     }
-
 }

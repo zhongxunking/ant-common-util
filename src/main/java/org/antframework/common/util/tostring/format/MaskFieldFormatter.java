@@ -9,6 +9,7 @@
 package org.antframework.common.util.tostring.format;
 
 import org.antframework.common.util.tostring.FieldFormatter;
+import org.antframework.common.util.validation.validator.BankCarNoValidator;
 import org.antframework.common.util.validation.validator.CertNoValidator;
 import org.antframework.common.util.validation.validator.EmailValidator;
 import org.antframework.common.util.validation.validator.MobileNoValidator;
@@ -83,6 +84,9 @@ public class MaskFieldFormatter implements FieldFormatter {
             endSize += str.length() - str.indexOf('@');
 
             return MaskUtil.mask(str, startSize, endSize, maskChar);
+        } else if (BankCarNoValidator.validate(str)) {
+            // 银行卡号明文：前6、后4
+            return MaskUtil.mask(str, 6, 4, maskChar);
         } else {
             // 无法识别的信息，采用全部掩码
             return MaskUtil.mask(str, 0, 0, maskChar);
