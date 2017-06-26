@@ -27,7 +27,7 @@ public class ToString {
     // null字符串
     private static final String NULL_STRING = "null";
     // 正在被解析对象的持有器（用于检查循环引用）
-    private static final ThreadLocal<Set> APPENDERING_OBJS_HOLDER = new ThreadLocal<>();
+    private static final ThreadLocal<Set> APPENDING_OBJS_HOLDER = new ThreadLocal<>();
     // 内部附加器（通过反射解析对象内部字段）
     private static final Appender INNER_APPENDER = new ObjInnerAppender();
     // 优先附加器（优先使用本list中的附加器解析对象）
@@ -51,8 +51,8 @@ public class ToString {
      * @return 转换得到的字符串
      */
     public static String toString(Object obj) {
-        if (APPENDERING_OBJS_HOLDER.get() == null) {
-            APPENDERING_OBJS_HOLDER.set(new HashSet());
+        if (APPENDING_OBJS_HOLDER.get() == null) {
+            APPENDING_OBJS_HOLDER.set(new HashSet());
         }
 
         StringBuilder builder = new StringBuilder();
@@ -100,16 +100,16 @@ public class ToString {
         }
 
         // 循环引用判断
-        if (APPENDERING_OBJS_HOLDER.get().contains(obj)) {
+        if (APPENDING_OBJS_HOLDER.get().contains(obj)) {
             builder.append(ObjectUtils.identityToString(obj));
             return;
         }
 
-        APPENDERING_OBJS_HOLDER.get().add(obj);
+        APPENDING_OBJS_HOLDER.get().add(obj);
         try {
             appender.append(builder, obj);
         } finally {
-            APPENDERING_OBJS_HOLDER.get().remove(obj);
+            APPENDING_OBJS_HOLDER.get().remove(obj);
         }
     }
 
