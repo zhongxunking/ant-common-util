@@ -8,6 +8,8 @@
  */
 package org.antframework.common.util.facade;
 
+import org.antframework.common.util.tostring.ToString;
+
 import java.io.Serializable;
 
 /**
@@ -47,5 +49,10 @@ public abstract class AbstractResult implements Serializable {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    @Override
+    public String toString() {
+        return ToString.toString(this);
     }
 }

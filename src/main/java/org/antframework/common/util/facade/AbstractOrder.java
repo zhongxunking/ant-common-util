@@ -8,6 +8,7 @@
  */
 package org.antframework.common.util.facade;
 
+import org.antframework.common.util.tostring.ToString;
 import org.antframework.common.util.validation.AntValidation;
 
 import javax.validation.ConstraintViolation;
@@ -43,5 +44,10 @@ public abstract class AbstractOrder implements Serializable {
             errMsg.deleteCharAt(errMsg.length() - 1);
             throw new IllegalArgumentException(errMsg.toString());
         }
+    }
+
+    @Override
+    public String toString() {
+        return ToString.toString(this);
     }
 }
