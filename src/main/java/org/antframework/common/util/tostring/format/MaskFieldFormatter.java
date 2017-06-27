@@ -25,7 +25,7 @@ public class MaskFieldFormatter implements FieldFormatter {
     // 需被掩码的属性
     private Field field;
     // 被格式化的属性前段（属性名=）
-    private String formattedFieldPre;
+    private String formattedPre;
     // 是否全部掩码
     private boolean allMask;
     // 掩码字符
@@ -40,7 +40,7 @@ public class MaskFieldFormatter implements FieldFormatter {
         }
 
         this.field = field;
-        formattedFieldPre = field.getName() + "=";
+        formattedPre = field.getName() + "=";
         Mask maskAnnotation = AnnotatedElementUtils.findMergedAnnotation(field, Mask.class);
         allMask = maskAnnotation.allMask();
         maskChar = maskAnnotation.maskChar();
@@ -61,7 +61,7 @@ public class MaskFieldFormatter implements FieldFormatter {
             }
         }
 
-        return formattedFieldPre + maskedStr;
+        return formattedPre + maskedStr;
     }
 
     // 自动判断需掩码部分

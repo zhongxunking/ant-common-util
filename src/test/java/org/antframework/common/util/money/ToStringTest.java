@@ -9,8 +9,15 @@
 package org.antframework.common.util.money;
 
 import org.antframework.common.util.tostring.ToString;
+import org.antframework.common.util.tostring.format.Hide;
+import org.antframework.common.util.tostring.format.HideDetail;
 import org.antframework.common.util.tostring.format.Mask;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -19,6 +26,18 @@ public class ToStringTest {
 
     @Test
     public void testMask() {
+        String[] arr = {"aa", "bb", "cc"};
+
+        List<String> list = new ArrayList<>();
+        list.add("aa");
+        list.add("bb");
+        list.add("cc");
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("aa", 1);
+        map.put("bb", 2);
+        map.put("cc", 3);
+
         User user = new User("zhongxun",
                 17,
                 "123456",
@@ -27,7 +46,12 @@ public class ToStringTest {
                 "abcde@163.com",
                 "6228480402637874213",
                 "91371600MA3DQC9148",
-                "asd&$7f23");
+                "asd&$7f23",
+                arr,
+                arr,
+                arr,
+                list,
+                map);
         System.out.println(user);
     }
 
@@ -48,8 +72,17 @@ public class ToStringTest {
         private String organizationCode;
         @Mask
         private String unrecognize;
+        private String[] arr0;
+        @Hide
+        private String[] arr1;
+        @HideDetail
+        private String[] arr;
+        @HideDetail
+        private List<String> col;
+        @HideDetail
+        private Map<String, Object> map;
 
-        public User(String name, int age, String password, String certNo, String mobileNo, String email, String bankCardNo, String organizationCode, String unrecognize) {
+        public User(String name, int age, String password, String certNo, String mobileNo, String email, String bankCardNo, String organizationCode, String unrecognize, String[] arr0, String[] arr1, String[] arr, List<String> col, Map<String, Object> map) {
             this.name = name;
             this.age = age;
             this.password = password;
@@ -59,6 +92,11 @@ public class ToStringTest {
             this.bankCardNo = bankCardNo;
             this.organizationCode = organizationCode;
             this.unrecognize = unrecognize;
+            this.arr0 = arr0;
+            this.arr1 = arr1;
+            this.arr = arr;
+            this.col = col;
+            this.map = map;
         }
 
         @Override
