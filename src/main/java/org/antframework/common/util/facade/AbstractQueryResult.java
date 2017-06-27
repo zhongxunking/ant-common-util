@@ -8,6 +8,8 @@
  */
 package org.antframework.common.util.facade;
 
+import org.antframework.common.util.tostring.format.HideDetail;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,7 @@ public abstract class AbstractQueryResult<T> extends AbstractResult {
     // 记录总数
     private long totalCount;
     // 查询出的当前页详细数据
+    @HideDetail
     private List<T> infos = new ArrayList<>();
 
     public long getTotalCount() {
