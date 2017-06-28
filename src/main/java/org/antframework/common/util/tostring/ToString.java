@@ -255,7 +255,7 @@ public class ToString {
 
         // 解析（将clazz及其继承的所有非静态属性解析出来，对于指定了formatter的属性则初始化该属性的formatter）
         private static ObjInnerAppenderExecutor parse(Class clazz) {
-            Map<String, Field> fieldMap = new HashMap<>();
+            List<Field> fields = new ArrayList<>();
             Map<Field, FieldFormatter> formatterMap = new HashMap<>();
             for (Class parsingClass = clazz; parsingClass != null; parsingClass = parsingClass.getSuperclass()) {
                 for (Field field : parsingClass.getDeclaredFields()) {
@@ -263,7 +263,7 @@ public class ToString {
                         continue;
                     }
                     ReflectionUtils.makeAccessible(field);
-                    fieldMap.put(field.getName(), field);
+                    fields.add(field);
                     // 判断该属性是否指定了formatter
                     FieldFormat formatAnnotation = AnnotatedElementUtils.findMergedAnnotation(field, FieldFormat.class);
                     if (formatAnnotation != null) {
@@ -275,21 +275,21 @@ public class ToString {
                 }
             }
 
-            return new ObjInnerAppenderExecutor(ClassUtils.getShortName(clazz), fieldMap, formatterMap);
+            return new ObjInnerAppenderExecutor(ClassUtils.getShortName(clazz), fields, formatterMap);
         }
 
         // 执行器
         private static class ObjInnerAppenderExecutor {
             // 类名（简写）
             private String className;
-            // 字段Map（key：字段名）
-            private Map<String, Field> fieldMap;
+            // 字段
+            private List<Field> fields;
             // 字段格式化器Map
             private Map<Field, FieldFormatter> formatterMap;
 
-            public ObjInnerAppenderExecutor(String className, Map<String, Field> fieldMap, Map<Field, FieldFormatter> formatterMap) {
+            public ObjInnerAppenderExecutor(String className, List<Field> fields, Map<Field, FieldFormatter> formatterMap) {
                 this.className = className;
-                this.fieldMap = fieldMap;
+                this.fields = fields;
                 this.formatterMap = formatterMap;
             }
 
@@ -297,8 +297,8 @@ public class ToString {
             public void execute(StringBuilder builder, Object obj) {
                 builder.append(className).append('{');
 
-                for (Map.Entry<String, Field> entry : fieldMap.entrySet()) {
-                    FieldFormatter formatter = formatterMap.get(entry.getValue());
+                for (Field field : fields) {
+                    FieldFormatter formatter = formatterMap.get(field);
                     if (formatter != null) {
                         // 指定了formatter，则按照formatter执行
                         String formattedField = formatter.format(obj);
@@ -308,8 +308,8 @@ public class ToString {
                         }
                     } else {
                         // 未指定formatter，则按照默认方式执行
-                        builder.append(entry.getKey()).append('=');
-                        ToString.append(builder, ReflectionUtils.getField(entry.getValue(), obj));
+                        builder.append(field.getName()).append('=');
+                        ToString.append(builder, ReflectionUtils.getField(field, obj));
                         builder.append(',');
                     }
                 }
