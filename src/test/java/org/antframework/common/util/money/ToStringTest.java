@@ -14,10 +14,7 @@ import org.antframework.common.util.tostring.format.HideDetail;
 import org.antframework.common.util.tostring.format.Mask;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  *
@@ -41,6 +38,7 @@ public class ToStringTest {
         User user = new User(0, 1, 100,
                 "zhongxun",
                 17,
+                new Date(),
                 "123456",
                 "15082119920706049X",
                 "18949141125",
@@ -76,6 +74,7 @@ public class ToStringTest {
     public static class User extends Base {
         private String name;
         private int age;
+        private Date birthDay;
         @Mask(allMask = true)
         private String password;
         @Mask
@@ -100,10 +99,11 @@ public class ToStringTest {
         @HideDetail
         private Map<String, Object> map;
 
-        public User(long id0, long id1, long amount, String name, int age, String password, String certNo, String mobileNo, String email, String bankCardNo, String organizationCode, String unrecognize, String[] arr0, String[] arr1, String[] arr, List<String> col, Map<String, Object> map) {
+        public User(long id0, long id1, long amount, String name, int age, Date birthDay, String password, String certNo, String mobileNo, String email, String bankCardNo, String organizationCode, String unrecognize, String[] arr0, String[] arr1, String[] arr, List<String> col, Map<String, Object> map) {
             super(id0, id1, amount);
             this.name = name;
             this.age = age;
+            this.birthDay = birthDay;
             this.password = password;
             this.certNo = certNo;
             this.mobileNo = mobileNo;
