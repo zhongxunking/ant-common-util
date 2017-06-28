@@ -18,7 +18,7 @@ public class MaskUtil {
     /**
      * 掩码
      *
-     * @param str       需被淹吗的字符串
+     * @param str       需被掩码的字符串
      * @param startSize 前段明文长度
      * @param endSize   末段明文长度
      * @return 掩码后的字符串
@@ -31,7 +31,7 @@ public class MaskUtil {
     /**
      * 掩码
      *
-     * @param str       需被淹吗的字符串
+     * @param str       需被掩码的字符串
      * @param startSize 前段明文长度
      * @param endSize   末段明文长度
      * @param maskChar  掩码字符
