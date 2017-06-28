@@ -38,7 +38,8 @@ public class ToStringTest {
         map.put("bb", 2);
         map.put("cc", 3);
 
-        User user = new User("zhongxun",
+        User user = new User(0, 1, 100,
+                "zhongxun",
                 17,
                 "123456",
                 "15082119920706049X",
@@ -52,10 +53,27 @@ public class ToStringTest {
                 arr,
                 list,
                 map);
-        System.out.println(user);
+        long startTime = System.currentTimeMillis();
+        for (int i = 0; i < 10; i++) {
+            String str = ToString.toString(user);
+            System.out.println(str);
+        }
+        System.out.println("耗时：" + (System.currentTimeMillis() - startTime) + "ms");
     }
 
-    public static class User {
+    public static class Base {
+        private long id0;
+        private long id1;
+        private long amount;
+
+        public Base(long id0, long id1, long amount) {
+            this.id0 = id0;
+            this.id1 = id1;
+            this.amount = amount;
+        }
+    }
+
+    public static class User extends Base {
         private String name;
         private int age;
         @Mask(allMask = true)
@@ -82,7 +100,8 @@ public class ToStringTest {
         @HideDetail
         private Map<String, Object> map;
 
-        public User(String name, int age, String password, String certNo, String mobileNo, String email, String bankCardNo, String organizationCode, String unrecognize, String[] arr0, String[] arr1, String[] arr, List<String> col, Map<String, Object> map) {
+        public User(long id0, long id1, long amount, String name, int age, String password, String certNo, String mobileNo, String email, String bankCardNo, String organizationCode, String unrecognize, String[] arr0, String[] arr1, String[] arr, List<String> col, Map<String, Object> map) {
+            super(id0, id1, amount);
             this.name = name;
             this.age = age;
             this.password = password;
@@ -97,11 +116,6 @@ public class ToStringTest {
             this.arr = arr;
             this.col = col;
             this.map = map;
-        }
-
-        @Override
-        public String toString() {
-            return ToString.toString(this);
         }
     }
 }

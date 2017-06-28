@@ -258,12 +258,13 @@ public class ToString {
             List<Field> fields = new ArrayList<>();
             Map<Field, FieldFormatter> formatterMap = new HashMap<>();
             for (Class parsingClass = clazz; parsingClass != null; parsingClass = parsingClass.getSuperclass()) {
+                List<Field> parsingFields = new ArrayList<>();
                 for (Field field : parsingClass.getDeclaredFields()) {
                     if (Modifier.isStatic(field.getModifiers())) {
                         continue;
                     }
                     ReflectionUtils.makeAccessible(field);
-                    fields.add(field);
+                    parsingFields.add(field);
                     // 判断该属性是否指定了formatter
                     FieldFormat formatAnnotation = AnnotatedElementUtils.findMergedAnnotation(field, FieldFormat.class);
                     if (formatAnnotation != null) {
@@ -273,6 +274,8 @@ public class ToString {
                         formatterMap.put(field, formatter);
                     }
                 }
+                // 顺序：按照先父类再子类，每个类中按照属性定义顺序
+                fields.addAll(0, parsingFields);
             }
 
             return new ObjInnerAppenderExecutor(ClassUtils.getShortName(clazz), fields, formatterMap);
