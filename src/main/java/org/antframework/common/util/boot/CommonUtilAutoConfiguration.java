@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Import;
  * common-util自动配置类
  */
 @Configuration
-@Import({JpaScanConfiguration.class, ConverterRegistryConfiguration.class})
+@Import({ConverterRegistryConfiguration.class, JpaScanConfiguration.class})
 public class CommonUtilAutoConfiguration {
     // 本配置类的作用就是在spring-boot项目中自动导入相关配置类
 }
