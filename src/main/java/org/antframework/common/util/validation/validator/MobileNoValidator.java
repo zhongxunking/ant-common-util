@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  */
 public class MobileNoValidator {
     // 手机号正则表达式
-    private static final Pattern MOBILE_NO_PATTERN = Pattern.compile("^(13[0-9]|14[57]|15[0-35-9]|17[013678]|18[0-9])[0-9]{8}$");
+    private static final Pattern MOBILE_NO_PATTERN = Pattern.compile("^(13[0-9]|14[57]|15[0-35-9]|166|17[013678]|18[0-9]|19[8-9])[0-9]{8}$");
 
     /**
      * 校验
