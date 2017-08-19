@@ -6,9 +6,8 @@
  * 修订记录:
  * @author 钟勋 2017-06-23 17:36 创建
  */
-package org.antframework.common.util.money;
+package org.antframework.common.util.tostring.format;
 
-import org.antframework.common.util.tostring.format.MaskUtil;
 import org.junit.Test;
 
 /**

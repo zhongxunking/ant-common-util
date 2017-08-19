@@ -6,9 +6,8 @@
  * 修订记录:
  * @author 钟勋 2017-06-24 23:31 创建
  */
-package org.antframework.common.util.money;
+package org.antframework.common.util.validation.validator;
 
-import org.antframework.common.util.validation.validator.MobileNoValidator;
 import org.junit.Assert;
 import org.junit.Test;
 

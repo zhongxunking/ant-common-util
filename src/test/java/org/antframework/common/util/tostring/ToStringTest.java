@@ -6,9 +6,8 @@
  * 修订记录:
  * @author 钟勋 2017-06-22 22:03 创建
  */
-package org.antframework.common.util.money;
+package org.antframework.common.util.tostring;
 
-import org.antframework.common.util.tostring.ToString;
 import org.antframework.common.util.tostring.format.Hide;
 import org.antframework.common.util.tostring.format.HideDetail;
 import org.antframework.common.util.tostring.format.Mask;
