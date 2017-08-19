@@ -22,7 +22,9 @@ public class MobileNoValidatorTest {
                 "18255082662",
                 "15505505515",
                 "13755072771",
-                "15066063937"};
+                "15066063937",
+                "19866063937",
+                "19966063937"};
         for (String mobileNo : mobileNos) {
             Assert.assertTrue(MobileNoValidator.validate(mobileNo));
         }
