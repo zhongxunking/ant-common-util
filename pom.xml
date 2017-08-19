@@ -12,14 +12,13 @@
     <version>1.0-SNAPSHOT</version>
 
     <name>ant-common-util</name>
-    <url>http://antframework.org</url>
+    <description>antframework公共工具包</description>
 
     <dependencies>
         <!--Apache工具包-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.5</version>
         </dependency>
         <!--spring-boot-->
         <dependency>
@@ -36,7 +35,6 @@
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.1-api</artifactId>
-            <version>1.0.0.Final</version>
             <scope>provided</scope>
         </dependency>
         <!--测试依赖-->
