@@ -37,6 +37,13 @@
             <artifactId>hibernate-jpa-2.1-api</artifactId>
             <scope>provided</scope>
         </dependency>
+        <!--spring-data-commons-->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
         <!--测试依赖-->
         <dependency>
             <groupId>junit</groupId>

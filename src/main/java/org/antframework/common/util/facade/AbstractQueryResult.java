@@ -10,13 +10,14 @@ package org.antframework.common.util.facade;
 
 import org.antframework.common.util.tostring.format.HideDetail;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 抽象分页result（所有分页result的父类）
  */
-public abstract class AbstractQueryResult<T> extends AbstractResult {
+public abstract class AbstractQueryResult<T extends Serializable> extends AbstractResult {
     // 记录总数
     private long totalCount;
     // 查询出的当前页详细数据
