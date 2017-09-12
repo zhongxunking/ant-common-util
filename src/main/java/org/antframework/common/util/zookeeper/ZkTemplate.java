@@ -139,6 +139,13 @@ public class ZkTemplate {
     }
 
     /**
+     * 获取zkClient
+     */
+    public CuratorFramework getZkClient() {
+        return zkClient;
+    }
+
+    /**
      * 节点监听器
      */
     public interface NodeListener extends NodeCacheListener {
