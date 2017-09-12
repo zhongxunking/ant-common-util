@@ -145,6 +145,7 @@ public class ZkTemplate {
         /**
          * 初始化
          */
-        void init(NodeCache nodeCache);
+        default void init(NodeCache nodeCache) {
+        }
     }
 }
