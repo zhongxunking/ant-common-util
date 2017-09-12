@@ -11,6 +11,8 @@ package org.antframework.common.util.zookeeper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.recipes.cache.NodeCache;
+import org.apache.curator.framework.recipes.cache.NodeCacheListener;
 import org.apache.zookeeper.CreateMode;
 
 import java.util.List;
@@ -32,6 +34,19 @@ public class ZkTemplate {
     }
 
     /**
+     * 校验节点是否存在
+     *
+     * @param path 节点路径
+     */
+    public boolean checkExists(String path) {
+        try {
+            return zkClient.checkExists().forPath(path) != null;
+        } catch (Throwable e) {
+            return ExceptionUtils.wrapAndThrow(e);
+        }
+    }
+
+    /**
      * 创建节点（路径中任何一个节点如果不存在，则会创建该节点）
      *
      * @param path 节点路径
@@ -41,7 +56,7 @@ public class ZkTemplate {
             StringBuilder pathBuilder = new StringBuilder();
             for (String node : StringUtils.split(path, NODE_SEPARATOR)) {
                 pathBuilder.append(NODE_SEPARATOR).append(node);
-                if (zkClient.checkExists().forPath(pathBuilder.toString()) != null) {
+                if (checkExists(pathBuilder.toString())) {
                     continue;
                 }
                 zkClient.create().withMode(CreateMode.PERSISTENT).forPath(pathBuilder.toString());
@@ -58,7 +73,7 @@ public class ZkTemplate {
      */
     public void deleteNode(String path) {
         try {
-            if (zkClient.checkExists().forPath(path) == null) {
+            if (checkExists(path)) {
                 return;
             }
             List<String> children = zkClient.getChildren().forPath(path);
@@ -86,6 +101,25 @@ public class ZkTemplate {
     }
 
     /**
+     * 监听节点
+     *
+     * @param path     节点路径
+     * @param listener 监听器
+     * @return 底层NodeCache
+     */
+    public NodeCache listenNode(String path, NodeListener listener) {
+        try {
+            NodeCache nodeCache = new NodeCache(zkClient, path);
+            listener.init(nodeCache);
+            nodeCache.getListenable().addListener(listener);
+            nodeCache.start(true);
+            return nodeCache;
+        } catch (Exception e) {
+            return ExceptionUtils.wrapAndThrow(e);
+        }
+    }
+
+    /**
      * 构建路径
      *
      * @param pathParts 路径片段
@@ -102,5 +136,15 @@ public class ZkTemplate {
             pathBuilder.append(pathPart);
         }
         return pathBuilder.toString();
+    }
+
+    /**
+     * 节点监听器
+     */
+    public interface NodeListener extends NodeCacheListener {
+        /**
+         * 初始化
+         */
+        void init(NodeCache nodeCache);
     }
 }
