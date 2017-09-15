@@ -73,7 +73,7 @@ public class ZkTemplate {
      */
     public void deleteNode(String path) {
         try {
-            if (checkExists(path)) {
+            if (!checkExists(path)) {
                 return;
             }
             List<String> children = zkClient.getChildren().forPath(path);
