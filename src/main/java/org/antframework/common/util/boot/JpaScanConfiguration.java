@@ -17,7 +17,6 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.boot.autoconfigure.AutoConfigurationPackages;
 import org.springframework.boot.autoconfigure.domain.EntityScanPackages;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.util.ClassUtils;
 
@@ -27,7 +26,6 @@ import java.util.List;
 /**
  * jpa扫描配置（将本工具相关包加入jpa扫描）
  */
-@Configuration
 public class JpaScanConfiguration implements BeanFactoryAware, BeanDefinitionRegistryPostProcessor, Ordered {
     // Spring的bean工厂
     private BeanFactory beanFactory;
