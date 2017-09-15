@@ -42,7 +42,7 @@ public class ZkTemplate {
         try {
             return zkClient.checkExists().forPath(path) != null;
         } catch (Throwable e) {
-            return ExceptionUtils.wrapAndThrow(e);
+            return ExceptionUtils.rethrow(e);
         }
     }
 
@@ -62,7 +62,7 @@ public class ZkTemplate {
                 zkClient.create().withMode(CreateMode.PERSISTENT).forPath(pathBuilder.toString());
             }
         } catch (Throwable e) {
-            ExceptionUtils.wrapAndThrow(e);
+            ExceptionUtils.rethrow(e);
         }
     }
 
@@ -82,7 +82,7 @@ public class ZkTemplate {
             }
             zkClient.delete().forPath(path);
         } catch (Throwable e) {
-            ExceptionUtils.wrapAndThrow(e);
+            ExceptionUtils.rethrow(e);
         }
     }
 
@@ -96,7 +96,7 @@ public class ZkTemplate {
         try {
             zkClient.setData().forPath(path, data);
         } catch (Throwable e) {
-            ExceptionUtils.wrapAndThrow(e);
+            ExceptionUtils.rethrow(e);
         }
     }
 
@@ -117,7 +117,7 @@ public class ZkTemplate {
             nodeCache.start();
             return nodeCache;
         } catch (Exception e) {
-            return ExceptionUtils.wrapAndThrow(e);
+            return ExceptionUtils.rethrow(e);
         }
     }
 
