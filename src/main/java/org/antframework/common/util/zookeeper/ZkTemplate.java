@@ -149,6 +149,9 @@ public class ZkTemplate {
                 pathBuilder.append(NODE_SEPARATOR);
             }
             pathBuilder.append(pathPart);
+            if (pathBuilder.length() > 0 && pathBuilder.charAt(pathBuilder.length() - 1) == NODE_SEPARATOR) {
+                pathBuilder.deleteCharAt(pathBuilder.length() - 1);
+            }
         }
         if (pathBuilder.length() <= 0) {
             pathBuilder.append(NODE_SEPARATOR);
