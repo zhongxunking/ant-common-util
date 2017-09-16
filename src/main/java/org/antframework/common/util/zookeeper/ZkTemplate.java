@@ -150,6 +150,9 @@ public class ZkTemplate {
             }
             pathBuilder.append(pathPart);
         }
+        if (pathBuilder.length() <= 0) {
+            pathBuilder.append(NODE_SEPARATOR);
+        }
         return pathBuilder.toString();
     }
 
