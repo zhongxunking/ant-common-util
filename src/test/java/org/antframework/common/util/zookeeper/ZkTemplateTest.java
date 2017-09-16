@@ -15,6 +15,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.List;
+
 /**
  *
  */
@@ -64,5 +66,10 @@ public class ZkTemplateTest {
     @Test
     public void testSetData() {
         zkTemplate.setData("/dev/scbfund", "abcd".getBytes());
+    }
+
+    @Test
+    public void testGetChildren() {
+        List<String> children = zkTemplate.getChildren("/dev/scbfund");
     }
 }

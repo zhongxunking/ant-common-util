@@ -41,7 +41,7 @@ public class ZkTemplate {
     public boolean checkExists(String path) {
         try {
             return zkClient.checkExists().forPath(path) != null;
-        } catch (Throwable e) {
+        } catch (Exception e) {
             return ExceptionUtils.rethrow(e);
         }
     }
@@ -61,7 +61,7 @@ public class ZkTemplate {
                 }
                 zkClient.create().withMode(CreateMode.PERSISTENT).forPath(pathBuilder.toString());
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             ExceptionUtils.rethrow(e);
         }
     }
@@ -76,12 +76,11 @@ public class ZkTemplate {
             if (!checkExists(path)) {
                 return;
             }
-            List<String> children = zkClient.getChildren().forPath(path);
-            for (String child : children) {
+            for (String child : getChildren(path)) {
                 deleteNode(buildPath(path, child));
             }
             zkClient.delete().forPath(path);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             ExceptionUtils.rethrow(e);
         }
     }
@@ -95,7 +94,7 @@ public class ZkTemplate {
     public void setData(String path, byte[] data) {
         try {
             zkClient.setData().forPath(path, data);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             ExceptionUtils.rethrow(e);
         }
     }
@@ -116,6 +115,20 @@ public class ZkTemplate {
             }
             nodeCache.start();
             return nodeCache;
+        } catch (Exception e) {
+            return ExceptionUtils.rethrow(e);
+        }
+    }
+
+    /**
+     * 获取子节点
+     *
+     * @param path 父节点路径
+     * @return 子节点名称
+     */
+    public List<String> getChildren(String path) {
+        try {
+            return zkClient.getChildren().forPath(path);
         } catch (Exception e) {
             return ExceptionUtils.rethrow(e);
         }
