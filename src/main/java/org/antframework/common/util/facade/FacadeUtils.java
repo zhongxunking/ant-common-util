@@ -22,6 +22,16 @@ import java.util.Collection;
 public class FacadeUtils {
 
     /**
+     * 计算总页数
+     *
+     * @param totalCount 记录总数
+     * @param pageSize   每页大小
+     */
+    public static int calcTotalPage(long totalCount, int pageSize) {
+        return (int) ((totalCount + pageSize - 1) / pageSize);
+    }
+
+    /**
      * 以默认转换器设置查询result
      *
      * @param result    需被设置的result
