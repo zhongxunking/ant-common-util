@@ -17,7 +17,9 @@ public enum CommonResultCode {
 
     UNKNOWN_ERROR("common-0001", "未知错误"),
 
-    INVALID_PARAMETER("common-0002", "请求参数非法"),;
+    INVALID_PARAMETER("common-0002", "请求参数非法"),
+
+    ILLEGAL_STATE("common-0003", "非法内部状态"),;
 
     // 结果码
     private String code;
