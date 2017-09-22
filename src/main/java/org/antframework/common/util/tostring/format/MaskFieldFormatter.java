@@ -68,11 +68,11 @@ public class MaskFieldFormatter implements FieldFormatter {
     private String autoMask(String str) {
         if (CertNoValidator.validate(str)) {
             // 身份证号明文：前1、后1
-            return MaskUtil.mask(str, 1, 1, maskChar);
+            return MaskUtils.mask(str, 1, 1, maskChar);
         }
         if (MobileNoValidator.validate(str)) {
             // 手机号明文：前3、后4
-            return MaskUtil.mask(str, 3, 4, maskChar);
+            return MaskUtils.mask(str, 3, 4, maskChar);
         } else if (EmailValidator.validate(str)) {
             // 邮箱掩码，掩码前：zhongxunking@163.com，掩码后：zho******ing@163.com
             int localUnmaskSize = str.indexOf('@') / 2;
@@ -80,16 +80,16 @@ public class MaskFieldFormatter implements FieldFormatter {
             int startSize = localUnmaskSize - endSize;
             endSize += str.length() - str.indexOf('@');
 
-            return MaskUtil.mask(str, startSize, endSize, maskChar);
+            return MaskUtils.mask(str, startSize, endSize, maskChar);
         } else if (BankCarNoValidator.validate(str)) {
             // 银行卡号明文：前6、后4
-            return MaskUtil.mask(str, 6, 4, maskChar);
+            return MaskUtils.mask(str, 6, 4, maskChar);
         } else if (OrganizationCodeValidator.validate(str)) {
             // 组织机构代码明文：前1、后3
-            return MaskUtil.mask(str, 1, 3, maskChar);
+            return MaskUtils.mask(str, 1, 3, maskChar);
         } else {
             // 无法识别的信息，采用全部掩码
-            return MaskUtil.mask(str, 0, 0, maskChar);
+            return MaskUtils.mask(str, 0, 0, maskChar);
         }
     }
 
