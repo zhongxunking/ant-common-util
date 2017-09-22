@@ -11,7 +11,7 @@ package org.antframework.common.util.tostring.format;
 /**
  * 掩码工具
  */
-public class MaskUtil {
+public class MaskUtils {
     // 默认掩码字符
     private static final char DEFAULT_MASK_CHAR = '*';
 
