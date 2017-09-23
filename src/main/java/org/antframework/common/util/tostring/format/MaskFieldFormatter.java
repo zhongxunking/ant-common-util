@@ -28,6 +28,10 @@ public class MaskFieldFormatter implements FieldFormatter {
     private String formattedPre;
     // 是否全部掩码
     private boolean allMask;
+    // 前段明文长度
+    private int startSize;
+    // 末段明文长度
+    private int endSize;
     // 掩码字符
     private char maskChar;
     // 全部掩码的字符串
@@ -43,8 +47,16 @@ public class MaskFieldFormatter implements FieldFormatter {
         formattedPre = field.getName() + "=";
         Mask maskAnnotation = AnnotatedElementUtils.findMergedAnnotation(field, Mask.class);
         allMask = maskAnnotation.allMask();
+        startSize = maskAnnotation.startSize();
+        endSize = maskAnnotation.endSize();
+        if (startSize >= 0 && endSize < 0
+                || startSize < 0 && endSize >= 0) {
+            throw new IllegalArgumentException("属性" + field + "的@Mask注解设置不合法：startSize、endSize要么都被设置，要么都不被设置");
+        }
         maskChar = maskAnnotation.maskChar();
-        allMaskStr = buildMaskAllStr(maskChar);
+        if (allMask) {
+            allMaskStr = buildMaskAllStr(maskChar);
+        }
     }
 
     @Override
@@ -56,6 +68,8 @@ public class MaskFieldFormatter implements FieldFormatter {
         } else {
             if (allMask) {
                 maskedStr = allMaskStr;
+            } else if (startSize >= 0) {
+                maskedStr = MaskUtils.mask(str, startSize, endSize, maskChar);
             } else {
                 maskedStr = autoMask(str);
             }

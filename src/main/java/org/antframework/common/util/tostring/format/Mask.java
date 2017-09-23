@@ -14,6 +14,7 @@ import java.lang.annotation.*;
 
 /**
  * ToString时掩码
+ * （优先判断allMask是否全部掩码，如果不是，则判断startSize、endSize，如果这两个属性没被设置，则会自动判断需掩码部分{@link MaskFieldFormatter}）
  */
 @Documented
 @Target(ElementType.FIELD)
@@ -23,9 +24,21 @@ public @interface Mask {
 
     /**
      * 是否全部掩码
-     * （true：得到固定长度的掩码字符串；false：程序自动判断需掩码的部分）
+     * （true：得到固定{@link MaskFieldFormatter#ALL_MASK_STR_SIZE}位长度的掩码字符串；false：依据下面其他属性进行掩码）
      */
     boolean allMask() default false;
+
+    /**
+     * 前段明文长度
+     * （默认不生效。如果本属性被设置，则endSize也必须被设置）
+     */
+    int startSize() default -1;
+
+    /**
+     * 末段明文长度
+     * （默认不生效。如果本属性被设置，则startSize也必须被设置）
+     */
+    int endSize() default -1;
 
     /**
      * 掩码字符（默认'*'）

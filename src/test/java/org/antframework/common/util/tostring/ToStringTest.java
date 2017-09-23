@@ -39,6 +39,7 @@ public class ToStringTest {
                 17,
                 new Date(),
                 "123456",
+                "abcdefghijklmn",
                 "15082119920706049X",
                 "18949141125",
                 "abcde@163.com",
@@ -76,6 +77,8 @@ public class ToStringTest {
         private Date birthDay;
         @Mask(allMask = true)
         private String password;
+        @Mask(startSize = 4, endSize = 2)
+        private String fixMaskSize;
         @Mask
         private String certNo;
         @Mask
@@ -98,12 +101,13 @@ public class ToStringTest {
         @HideDetail
         private Map<String, Object> map;
 
-        public User(long id0, long id1, long amount, String name, int age, Date birthDay, String password, String certNo, String mobileNo, String email, String bankCardNo, String organizationCode, String unrecognize, String[] arr0, String[] arr1, String[] arr, List<String> col, Map<String, Object> map) {
+        public User(long id0, long id1, long amount, String name, int age, Date birthDay, String password, String fixMaskSize, String certNo, String mobileNo, String email, String bankCardNo, String organizationCode, String unrecognize, String[] arr0, String[] arr1, String[] arr, List<String> col, Map<String, Object> map) {
             super(id0, id1, amount);
             this.name = name;
             this.age = age;
             this.birthDay = birthDay;
             this.password = password;
+            this.fixMaskSize = fixMaskSize;
             this.certNo = certNo;
             this.mobileNo = mobileNo;
             this.email = email;
