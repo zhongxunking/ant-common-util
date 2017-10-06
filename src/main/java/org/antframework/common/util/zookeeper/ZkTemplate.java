@@ -102,18 +102,19 @@ public class ZkTemplate {
     /**
      * 监听节点
      *
-     * @param path      节点路径
-     * @param listeners 监听器
+     * @param path             节点路径
+     * @param initCallListener 初始化时是否调用监听器
+     * @param listeners        监听器
      * @return 底层NodeCache
      */
-    public NodeCache listenNode(String path, NodeListener... listeners) {
+    public NodeCache listenNode(String path, boolean initCallListener, NodeListener... listeners) {
         try {
             NodeCache nodeCache = new NodeCache(zkClient, path);
             for (NodeListener listener : listeners) {
                 listener.init(nodeCache);
                 nodeCache.getListenable().addListener(listener);
             }
-            nodeCache.start();
+            nodeCache.start(!initCallListener);
             return nodeCache;
         } catch (Exception e) {
             return ExceptionUtils.rethrow(e);
