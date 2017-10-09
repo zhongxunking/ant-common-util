@@ -17,7 +17,7 @@
         }
     }
     
-toString得到的字符串：
+toString得到的字符串类似这样：
 
     User{name="张三",age=20,password=******}
     
@@ -51,7 +51,7 @@ Money提供jsr303校验注解@MoneyConstraint：
 用long来表示钱的话，前后端交互时可能需要将以元为单位的字符串转换为以分为单位的long，比较繁琐。
 
 Money提供转换器将前端传进来的以元为单位的字符串自动转换为Money类（前提是使用的springMvc），具体配置如下：
-1. 如果是spring-boot项目则不需要进行任何配置
+1. 如果是spring-boot项目则不需要进行任何配置。
 
     如果是非spring-boot项目则需要手动引入配置类ConverterRegistryConfiguration，比如：
 
@@ -73,7 +73,7 @@ Money提供转换器将前端传进来的以元为单位的字符串自动转换
 
 #### 2.3 在jpa中使用Money
 在编写jpa实体时可以直接使用Money类，Money类型字段在数据库表中的类型与Long在数据库表中的类型相同。
-1. 如果是在spring-boot项目中，使用方式如下：
+1. 如果是在spring-boot项目中，使用方式和其他普通类型没有任何区别，如下：
 
 
         @Entity
@@ -83,7 +83,7 @@ Money提供转换器将前端传进来的以元为单位的字符串自动转换
             // 在此省略其他字段
         }
 
-2. 如果实在非spring-boot项目中，使用方式如下：
+2. 如果实在非spring-boot项目中，使用时需关联转换器，如下：
 
 
         @Entity
@@ -118,8 +118,8 @@ AbstractOrder是一个抽象类，它提供了触发jsr303校验的check()方法
 
         // 校验
         tradeOrder.check();
-        // 分组校验则使用checkWithGroups()
-        tradeOrder.checkWithGroups();
+        // 需进行分组校验，则调用下面方法（XxxGroup是你定义的分组）
+        tradeOrder.checkWithGroups(XxxGroup.clss);
 
 #### 3.2 抽象result（AbstractResult）
 AbstractResult是一个抽象类，它提供status（状态）、code（结果码）、message（描述）三个字段，使用时自己的result需继承它，比如：
@@ -132,7 +132,7 @@ AbstractResult是一个抽象类，它提供status（状态）、code（结果�
         }
 
 #### 3.3 服务接口定义
-服务接口入参只有一个order，返回结果是result，类似这样：
+服务接口定义遵照以下方式：入参只有一个order，返回结果是result。类似这样：
 
         public interface TradeService {
             // 交易
