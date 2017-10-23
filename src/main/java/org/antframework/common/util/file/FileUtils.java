@@ -8,8 +8,6 @@
  */
 package org.antframework.common.util.file;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -33,7 +31,7 @@ public class FileUtils {
             try {
                 file.createNewFile();
             } catch (IOException e) {
-                ExceptionUtils.rethrow(e);
+                throw new IllegalStateException(String.format("创建文件[%s]出错：%s", filePath, e.getMessage()), e);
             }
             if (!file.exists()) {
                 throw new IllegalStateException(String.format("创建文件[%s]失败，可能对该目录无写权限", dir.getPath()));
