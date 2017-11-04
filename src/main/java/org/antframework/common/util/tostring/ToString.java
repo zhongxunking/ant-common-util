@@ -19,6 +19,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 将对象转换成字符串工具类
@@ -127,7 +128,7 @@ public class ToString {
     private static class StringAppender implements Appender {
         @Override
         public boolean canAppend(Object obj) {
-            return obj.getClass() == String.class;
+            return obj instanceof String;
         }
 
         @Override
@@ -143,7 +144,7 @@ public class ToString {
 
         @Override
         public boolean canAppend(Object obj) {
-            return obj.getClass() == Date.class;
+            return obj instanceof Date;
         }
 
         @Override
@@ -156,7 +157,7 @@ public class ToString {
     private static class CollectionAppender implements Appender {
         @Override
         public boolean canAppend(Object obj) {
-            return Collection.class.isAssignableFrom(obj.getClass());
+            return obj instanceof Collection;
         }
 
         @Override
@@ -179,7 +180,7 @@ public class ToString {
     private static class MapAppender implements Appender {
         @Override
         public boolean canAppend(Object obj) {
-            return Map.class.isAssignableFrom(obj.getClass());
+            return obj instanceof Map;
         }
 
         @Override
@@ -205,7 +206,7 @@ public class ToString {
     private static class ArrayAppender implements Appender {
         @Override
         public boolean canAppend(Object obj) {
-            return obj.getClass().isArray();
+            return obj instanceof Object[];
         }
 
         @Override
@@ -227,8 +228,8 @@ public class ToString {
 
     // 反射解析对象内部属性的附加器（会转换成User{name="XXX",age=20}这种格式）
     private static class ObjInnerAppender implements Appender {
-        // 执行器缓存（每种类型只会在第一次执行时才会解析解析）
-        private static Map<Class, ObjInnerAppenderExecutor> EXECUTOR_CACHE = new HashMap<>();
+        // 执行器缓存（每种类型只会在第一次执行时才会进行解析）
+        private static Map<Class, ObjInnerAppenderExecutor> EXECUTOR_CACHE = new ConcurrentHashMap<>();
 
         @Override
         public boolean canAppend(Object obj) {

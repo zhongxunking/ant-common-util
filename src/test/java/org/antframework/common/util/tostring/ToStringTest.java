@@ -51,12 +51,14 @@ public class ToStringTest {
                 arr,
                 list,
                 map);
+        int count = 10;
         long startTime = System.currentTimeMillis();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < count; i++) {
             String str = ToString.toString(user);
             System.out.println(str);
         }
-        System.out.println("耗时：" + (System.currentTimeMillis() - startTime) + "ms");
+        long costTime = System.currentTimeMillis() - startTime;
+        System.out.println(String.format("循环：%s次，总耗时：%dms，平均耗时：%d微秒", count, costTime, (costTime * 1000) / count));
     }
 
     public static class Base {
