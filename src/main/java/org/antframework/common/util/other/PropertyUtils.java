@@ -6,7 +6,7 @@
  * 修订记录:
  * @author 钟勋 2017-10-26 14:42 创建
  */
-package org.antframework.common.util.system;
+package org.antframework.common.util.other;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;

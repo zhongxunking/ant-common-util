@@ -6,7 +6,7 @@
  * 修订记录:
  * @author 钟勋 2017-10-26 15:44 创建
  */
-package org.antframework.common.util.system;
+package org.antframework.common.util.other;
 
 import org.junit.Assert;
 import org.junit.Test;
