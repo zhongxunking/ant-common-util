@@ -38,14 +38,18 @@ public abstract class AbstractQueryParamParser implements QueryParamParser {
     @Override
     public QueryParam parse(Object obj) {
         Object rawValue = ReflectionUtils.getField(field, obj);
-        return new QueryParam(attrName, getOperator(), toValue(rawValue));
+        QueryOperator operator = getOperator();
+        if (rawValue == null && operator != QueryOperator.NULL && operator != QueryOperator.NOTNULL) {
+            return null;
+        }
+        return new QueryParam(attrName, operator, toQueryValue(rawValue));
     }
 
     // 获取操作符
     protected abstract QueryOperator getOperator();
 
     // 转换为查询value
-    protected Object toValue(Object rawValue) {
+    protected Object toQueryValue(Object rawValue) {
         return rawValue;
     }
 }

@@ -37,7 +37,7 @@ public class LikeQueryParamParser extends AbstractQueryParamParser {
     }
 
     @Override
-    protected Object toValue(Object rawValue) {
+    protected Object toQueryValue(Object rawValue) {
         StringBuilder builder = new StringBuilder(rawValue.toString().length() + 2);
         if (leftLike) {
             builder.append('%');

@@ -10,6 +10,7 @@ package org.antframework.common.util.jpa.query.annotation;
 
 import org.antframework.common.util.jpa.query.QueryParam;
 import org.antframework.common.util.jpa.query.annotation.operator.*;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class QueryParamsParserTest {
         order.setFrends(new String[]{"张三", "李四"});
 
         List<QueryParam> queryParams = QueryParamsParser.parse(order);
+        Assert.assertSame(13, queryParams.size());
     }
 
     public static class QueryUserOrder {

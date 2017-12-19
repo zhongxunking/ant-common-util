@@ -27,7 +27,7 @@ public interface QueryParamParser {
      * 解析出查询参数（此方法会被并发调用，实现类需保证线程安全）
      *
      * @param obj 被标注的对象
-     * @return 查询参数
+     * @return null表示没有查询参数
      */
     QueryParam parse(Object obj);
 }

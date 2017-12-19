@@ -35,7 +35,10 @@ public class QueryParamsParser {
     public static List<QueryParam> parse(Object obj) {
         List<QueryParam> queryParams = new ArrayList<>();
         for (QueryParamParser fieldParser : getFieldParsers(obj.getClass())) {
-            queryParams.add(fieldParser.parse(obj));
+            QueryParam queryParam = fieldParser.parse(obj);
+            if (queryParam != null) {
+                queryParams.add(queryParam);
+            }
         }
         return queryParams;
     }
