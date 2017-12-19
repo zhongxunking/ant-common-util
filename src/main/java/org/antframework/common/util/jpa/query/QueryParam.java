@@ -60,7 +60,7 @@ public class QueryParam {
      * @return 解析得到的查询参数
      */
     public static List<QueryParam> parse(Map<String, Object> queryMap) {
-        List<QueryParam> queryParams = new ArrayList<>();
+        List<QueryParam> queryParams = new ArrayList<>(queryMap.size());
         for (String key : queryMap.keySet()) {
             String[] names = StringUtils.splitByWholeSeparatorPreserveAllTokens(key, Character.toString(OPERATOR_ATTRNAME_SEPARATOR), 2);
             if (names.length != 2) {

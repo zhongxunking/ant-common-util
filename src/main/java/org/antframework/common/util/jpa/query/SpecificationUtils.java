@@ -32,7 +32,7 @@ public class SpecificationUtils {
      * @param <T>         实体类型
      * @return 解析出的Specification
      */
-    public static <T> Specification<T> parse(final Collection<QueryParam> queryParams) {
+    public static <T> Specification<T> parse(Collection<QueryParam> queryParams) {
         return new Specification<T>() {
             @Override
             public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {

@@ -11,9 +11,12 @@ package org.antframework.common.util.jpa.query.annotation;
 import org.antframework.common.util.jpa.query.QueryParam;
 import org.springframework.cglib.core.ReflectUtils;
 import org.springframework.core.annotation.AnnotatedElementUtils;
+import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -21,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class QueryParamsParser {
     // 缓存（每种类型只会在第一次执行时才会进行解析）
-    private static final Map<Class, Set<QueryParamParser>> CACHE = new ConcurrentHashMap<>();
+    private static final Map<Class, List<QueryParamParser>> CACHE = new ConcurrentHashMap<>();
 
     /**
      * 解析出查询参数
@@ -38,13 +41,15 @@ public class QueryParamsParser {
     }
 
     // 获取字段解析器
-    private static Set<QueryParamParser> getFieldParsers(Class clazz) {
-        Set<QueryParamParser> fieldParsers = CACHE.get(clazz);
+    private static List<QueryParamParser> getFieldParsers(Class clazz) {
+        List<QueryParamParser> fieldParsers = CACHE.get(clazz);
         if (fieldParsers == null) {
             synchronized (CACHE) {
                 fieldParsers = CACHE.get(clazz);
                 if (fieldParsers == null) {
+                    // 解析
                     fieldParsers = parseToFieldParser(clazz);
+                    // 缓存
                     CACHE.put(clazz, fieldParsers);
                 }
             }
@@ -53,14 +58,17 @@ public class QueryParamsParser {
     }
 
     // 解析出字段解析器
-    private static Set<QueryParamParser> parseToFieldParser(Class clazz) {
-        Set<QueryParamParser> parsers = new HashSet<>();
+    private static List<QueryParamParser> parseToFieldParser(Class clazz) {
+        List<QueryParamParser> parsers = new ArrayList<>();
         for (Class parsingClass = clazz; parsingClass != null; parsingClass = parsingClass.getSuperclass()) {
             for (Field field : parsingClass.getDeclaredFields()) {
+                // 判断属性是否是查询参数
                 org.antframework.common.util.jpa.query.annotation.QueryParam queryParamAnnotation = AnnotatedElementUtils.findMergedAnnotation(field, org.antframework.common.util.jpa.query.annotation.QueryParam.class);
                 if (queryParamAnnotation == null) {
                     continue;
                 }
+                ReflectionUtils.makeAccessible(field);
+                // 创建属性解析器
                 QueryParamParser parser = (QueryParamParser) ReflectUtils.newInstance(queryParamAnnotation.parser());
                 parser.init(field);
                 parsers.add(parser);
