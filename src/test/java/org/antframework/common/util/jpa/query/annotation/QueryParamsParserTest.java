@@ -39,11 +39,58 @@ public class QueryParamsParserTest {
 
         List<QueryParam> queryParams = QueryParamsParser.parse(order);
         Assert.assertSame(13, queryParams.size());
+
+
+        order = new QueryUserOrder();
+        order.setSex("man");
+//        order.setNotColor("white");
+        order.setStartGrade(50);
+        order.setEndGrade(200);
+        order.setStartAge(10);
+        order.setEndAge(30);
+        order.setName("zhongxun");
+//        order.setLname("zhongxun");
+        order.setRname("zhongxun");
+        order.setLrname("zhongxun");
+//        order.setEat("orange");
+        order.setDrink("coffee");
+        order.setFrends(new String[]{"张三", "李四"});
+        queryParams = QueryParamsParser.parse(order);
+        Assert.assertSame(11, queryParams.size());
+    }
+
+    @Test
+    public void testPerformance() {
+        int count = 1000000;
+
+        QueryUserOrder order = new QueryUserOrder();
+        order.setSex("man");
+        order.setNotColor("white");
+        order.setStartGrade(50);
+        order.setEndGrade(200);
+        order.setStartAge(10);
+        order.setEndAge(30);
+        order.setName("zhongxun");
+        order.setLname("zhongxun");
+        order.setRname("zhongxun");
+        order.setLrname("zhongxun");
+        order.setEat("orange");
+        order.setDrink("coffee");
+        order.setFrends(new String[]{"张三", "李四"});
+
+        long startTime = System.currentTimeMillis();
+        for (int i = 0; i < count; i++) {
+            List<QueryParam> queryParams = QueryParamsParser.parse(order);
+        }
+        long costTime = System.currentTimeMillis() - startTime;
+        System.out.println(String.format("循环：%d次，总耗时：%d毫秒，平均耗时：%d纳秒", count, costTime, costTime * 1000 * 1000 / count));
     }
 
     public static class QueryUserOrder {
         @QueryEQ
         private String sex;
+
+        private String aa;
 
         @QueryNotEQ(attrName = "color")
         private String notColor;
@@ -87,6 +134,14 @@ public class QueryParamsParserTest {
 
         public void setSex(String sex) {
             this.sex = sex;
+        }
+
+        public String getAa() {
+            return aa;
+        }
+
+        public void setAa(String aa) {
+            this.aa = aa;
         }
 
         public String getNotColor() {

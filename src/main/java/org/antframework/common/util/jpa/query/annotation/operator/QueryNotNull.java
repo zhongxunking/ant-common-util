@@ -8,8 +8,8 @@
  */
 package org.antframework.common.util.jpa.query.annotation.operator;
 
-import org.antframework.common.util.jpa.query.QueryOperator;
 import org.antframework.common.util.jpa.query.annotation.QueryParam;
+import org.antframework.common.util.jpa.query.annotation.operator.support.NotNullQueryParamParser;
 import org.springframework.core.annotation.AliasFor;
 
 import java.lang.annotation.*;
@@ -20,7 +20,7 @@ import java.lang.annotation.*;
 @Documented
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@NormalQueryParam(operator = QueryOperator.NOTNULL)
+@QueryParam(parser = NotNullQueryParamParser.class)
 public @interface QueryNotNull {
     /**
      * 属性名（默认为被注解标注的属性的名称）
