@@ -62,7 +62,7 @@ public class QueryParamsParser {
                     continue;
                 }
                 QueryParamParser parser = (QueryParamParser) ReflectUtils.newInstance(queryParamAnnotation.parser());
-                parser.initialize(field);
+                parser.init(field);
                 parsers.add(parser);
             }
         }

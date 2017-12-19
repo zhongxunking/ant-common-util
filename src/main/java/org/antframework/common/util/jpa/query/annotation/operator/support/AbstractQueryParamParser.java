@@ -27,7 +27,7 @@ public abstract class AbstractQueryParamParser implements QueryParamParser {
     private String attrName;
 
     @Override
-    public void initialize(Field field) {
+    public void init(Field field) {
         this.field = field;
         attrName = AnnotatedElementUtils.findMergedAnnotation(field, org.antframework.common.util.jpa.query.annotation.QueryParam.class).attrName();
         if (StringUtils.isEmpty(attrName)) {

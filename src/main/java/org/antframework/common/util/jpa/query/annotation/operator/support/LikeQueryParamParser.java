@@ -24,8 +24,8 @@ public class LikeQueryParamParser extends AbstractQueryParamParser {
     private boolean rightLike;
 
     @Override
-    public void initialize(Field field) {
-        super.initialize(field);
+    public void init(Field field) {
+        super.init(field);
         QueryLike queryLike = AnnotatedElementUtils.findMergedAnnotation(field, QueryLike.class);
         this.leftLike = queryLike.leftLike();
         this.rightLike = queryLike.rightLike();

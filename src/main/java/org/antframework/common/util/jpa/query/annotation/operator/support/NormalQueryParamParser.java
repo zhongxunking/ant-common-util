@@ -22,8 +22,8 @@ public class NormalQueryParamParser extends AbstractQueryParamParser {
     private QueryOperator operator;
 
     @Override
-    public void initialize(Field field) {
-        super.initialize(field);
+    public void init(Field field) {
+        super.init(field);
         this.operator = AnnotatedElementUtils.findMergedAnnotation(field, NormalQueryParam.class).operator();
     }
 
