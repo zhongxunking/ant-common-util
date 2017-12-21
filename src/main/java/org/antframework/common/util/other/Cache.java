@@ -8,6 +8,7 @@
  */
 package org.antframework.common.util.other;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -59,6 +60,15 @@ public class Cache<K, V> {
      */
     public V remove(K key) {
         return map.remove(key);
+    }
+
+    /**
+     * 获取所有缓存
+     *
+     * @return 包含所有缓存的不可修改map
+     */
+    public Map<K, V> getAll() {
+        return Collections.unmodifiableMap(map);
     }
 
     /**
