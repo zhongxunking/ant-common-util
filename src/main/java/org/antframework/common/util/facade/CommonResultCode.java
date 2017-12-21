@@ -23,7 +23,6 @@ public enum CommonResultCode {
 
     // 结果码
     private String code;
-
     // 描述
     private String message;
 

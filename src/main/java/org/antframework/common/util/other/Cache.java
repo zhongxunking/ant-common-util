@@ -14,6 +14,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 缓存（线程安全）
+ *
+ * @param <K> 缓存key类型
+ * @param <V> 缓存value类型
  */
 public class Cache<K, V> {
     // 存放缓存的map
