@@ -8,6 +8,7 @@
  */
 package org.antframework.common.util.tostring;
 
+import org.antframework.common.util.other.Cache;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.cglib.core.ReflectUtils;
 import org.springframework.core.annotation.AnnotatedElementUtils;
@@ -19,7 +20,6 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 将对象转换成字符串工具类
@@ -73,7 +73,7 @@ public class ToString {
         doAppender(appender, builder, obj);
     }
 
-    // 选择合适obj的附加器
+    // 选择适合obj的附加器
     private static Appender chooseAppender(Object obj, boolean inner) {
         if (obj == null) {
             return null;
@@ -229,7 +229,12 @@ public class ToString {
     // 反射解析对象内部属性的附加器（会转换成User{name="XXX",age=20}这种格式）
     private static class ObjInnerAppender implements Appender {
         // 执行器缓存（每种类型只会在第一次执行时才会进行解析）
-        private static Map<Class, ObjInnerAppenderExecutor> EXECUTOR_CACHE = new ConcurrentHashMap<>();
+        private static final Cache<Class, ObjInnerAppenderExecutor> EXECUTOR_CACHE = new Cache<>(new Cache.Supplier<Class, ObjInnerAppenderExecutor>() {
+            @Override
+            public ObjInnerAppenderExecutor get(Class key) {
+                return parse(key);
+            }
+        });
 
         @Override
         public boolean canAppend(Object obj) {
@@ -238,20 +243,7 @@ public class ToString {
 
         @Override
         public void append(StringBuilder builder, Object obj) {
-            ObjInnerAppenderExecutor executor = EXECUTOR_CACHE.get(obj.getClass());
-            if (executor == null) {
-                synchronized (EXECUTOR_CACHE) {
-                    executor = EXECUTOR_CACHE.get(obj.getClass());
-                    if (executor == null) {
-                        // 解析obj对应的类型
-                        executor = parse(obj.getClass());
-                        // 将执行器缓存起来
-                        EXECUTOR_CACHE.put(obj.getClass(), executor);
-                    }
-                }
-            }
-            // 执行执行器
-            executor.execute(builder, obj);
+            EXECUTOR_CACHE.get(obj.getClass()).execute(builder, obj);
         }
 
         // 解析（将clazz及其继承的所有非静态属性解析出来，对于指定了formatter的属性则初始化该属性的formatter）
