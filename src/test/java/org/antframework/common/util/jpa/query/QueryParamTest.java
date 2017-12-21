@@ -28,6 +28,6 @@ public class QueryParamTest {
         queryMap.put("GTE__grade", 60);
 
         List<QueryParam> queryParams = QueryParam.parse(queryMap);
-        Assert.assertSame(3, queryParams.size());
+        Assert.assertEquals(3, queryParams.size());
     }
 }

@@ -38,7 +38,7 @@ public class QueryParamsParserTest {
         order.setFrends(new String[]{"张三", "李四"});
 
         List<QueryParam> queryParams = QueryParamsParser.parse(order);
-        Assert.assertSame(13, queryParams.size());
+        Assert.assertEquals(13, queryParams.size());
 
 
         order = new QueryUserOrder();
@@ -56,7 +56,7 @@ public class QueryParamsParserTest {
         order.setDrink("coffee");
         order.setFrends(new String[]{"张三", "李四"});
         queryParams = QueryParamsParser.parse(order);
-        Assert.assertSame(11, queryParams.size());
+        Assert.assertEquals(11, queryParams.size());
     }
 
     @Test
