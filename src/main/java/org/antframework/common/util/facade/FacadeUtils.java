@@ -8,6 +8,7 @@
  */
 package org.antframework.common.util.facade;
 
+import org.antframework.common.util.other.Cache;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.convert.converter.Converter;
@@ -20,6 +21,14 @@ import java.util.Collection;
  * facade工具类
  */
 public class FacadeUtils {
+    // 分页查询result的info类型缓存
+    private static final Cache<Class, Class> INFO_CLASS_CACHE = new Cache<>(new Cache.Supplier<Class, Class>() {
+        @Override
+        public Class get(Class key) {
+            ResolvableType resolvableType = ResolvableType.forClass(AbstractQueryResult.class, key);
+            return resolvableType.getGeneric(0).resolve(Object.class);
+        }
+    });
 
     /**
      * 计算总页数
@@ -40,10 +49,7 @@ public class FacadeUtils {
      * @param <T>       info的类型
      */
     public static <S, T extends Serializable> void setQueryResult(AbstractQueryResult<T> result, PageExtractor<S> extractor) {
-        ResolvableType resolvableType = ResolvableType.forClass(AbstractQueryResult.class, result.getClass());
-        Class targetClass = resolvableType.getGeneric(0).resolve(Object.class);
-
-        setQueryResult(result, extractor, new DefaultConverter<>(targetClass));
+        setQueryResult(result, extractor, new DefaultConverter<S, T>(INFO_CLASS_CACHE.get(result.getClass())));
     }
 
     /**
