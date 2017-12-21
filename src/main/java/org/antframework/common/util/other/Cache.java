@@ -53,6 +53,15 @@ public class Cache<K, V> {
     }
 
     /**
+     * 获取所有缓存
+     *
+     * @return 包含所有缓存的不可修改map
+     */
+    public Map<K, V> getAll() {
+        return Collections.unmodifiableMap(map);
+    }
+
+    /**
      * 删除缓存
      *
      * @param key 缓存key
@@ -63,12 +72,10 @@ public class Cache<K, V> {
     }
 
     /**
-     * 获取所有缓存
-     *
-     * @return 包含所有缓存的不可修改map
+     * 清除所有缓存
      */
-    public Map<K, V> getAll() {
-        return Collections.unmodifiableMap(map);
+    public void clear() {
+        map.clear();
     }
 
     /**
