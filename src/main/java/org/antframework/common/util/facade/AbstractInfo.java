@@ -15,7 +15,7 @@ import java.io.Serializable;
 /**
  * 抽象info
  */
-public class AbstractInfo implements Serializable {
+public abstract class AbstractInfo implements Serializable {
 
     @Override
     public String toString() {
