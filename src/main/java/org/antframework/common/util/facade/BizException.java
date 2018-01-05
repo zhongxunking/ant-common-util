@@ -12,25 +12,46 @@ package org.antframework.common.util.facade;
  * 业务异常
  */
 public class BizException extends RuntimeException {
-    // 执行结果状态
+    // 结果状态
     private final Status status;
     // 结果码
     private final String code;
 
+    /**
+     * 创建业务异常
+     *
+     * @param status  结果状态
+     * @param code    结果码
+     * @param message 描述
+     */
     public BizException(Status status, String code, String message) {
         this(status, code, message, null);
     }
 
+    /**
+     * 创建业务异常
+     *
+     * @param status  结果状态
+     * @param code    结果码
+     * @param message 描述
+     * @param cause   原因
+     */
     public BizException(Status status, String code, String message, Throwable cause) {
         super(message, cause);
         this.status = status;
         this.code = code;
     }
 
+    /**
+     * 获取结果状态
+     */
     public Status getStatus() {
         return status;
     }
 
+    /**
+     * 获取结果码
+     */
     public String getCode() {
         return code;
     }
