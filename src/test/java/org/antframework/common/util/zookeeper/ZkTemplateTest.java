@@ -11,6 +11,7 @@ package org.antframework.common.util.zookeeper;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
+import org.apache.zookeeper.CreateMode;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -43,19 +44,19 @@ public class ZkTemplateTest {
 
     @Test
     public void testCreateNode() throws Exception {
-        zkTemplate.createNode("/dev/scbfund");
-        zkTemplate.createNode("/dev/scbfund1/aa");
-        zkTemplate.createNode("/dev/scbfund1/bb");
-        zkTemplate.createNode("/dev/scbfund1/cc");
-        zkTemplate.createNode("/dev/scbfund1/dd");
-        zkTemplate.createNode("/dev/scbfund2");
-        zkTemplate.createNode("/dev/scbfund2/aa");
-        zkTemplate.createNode("/dev/scbfund2/bb");
-        zkTemplate.createNode("/dev/scbfund2/cc");
-        zkTemplate.createNode("/dev/scbfund2/dd");
-        zkTemplate.createNode("/dev/scbfund3");
-        zkTemplate.createNode("/dev/scbfund4");
-        zkTemplate.createNode("/dev/scbfund5");
+        zkTemplate.createNode("/dev/scbfund", CreateMode.PERSISTENT);
+        zkTemplate.createNode("/dev/scbfund1/aa", CreateMode.PERSISTENT);
+        zkTemplate.createNode("/dev/scbfund1/bb", CreateMode.PERSISTENT);
+        zkTemplate.createNode("/dev/scbfund1/cc", CreateMode.PERSISTENT);
+        zkTemplate.createNode("/dev/scbfund1/dd", CreateMode.PERSISTENT);
+        zkTemplate.createNode("/dev/scbfund2", CreateMode.PERSISTENT);
+        zkTemplate.createNode("/dev/scbfund2/aa", CreateMode.PERSISTENT);
+        zkTemplate.createNode("/dev/scbfund2/bb", CreateMode.PERSISTENT);
+        zkTemplate.createNode("/dev/scbfund2/cc", CreateMode.PERSISTENT);
+        zkTemplate.createNode("/dev/scbfund2/dd", CreateMode.PERSISTENT);
+        zkTemplate.createNode("/dev/scbfund3", CreateMode.PERSISTENT);
+        zkTemplate.createNode("/dev/scbfund4", CreateMode.PERSISTENT);
+        zkTemplate.createNode("/dev/scbfund5", CreateMode.PERSISTENT);
     }
 
     @Test
@@ -71,5 +72,10 @@ public class ZkTemplateTest {
     @Test
     public void testGetChildren() {
         List<String> children = zkTemplate.getChildren("/dev/scbfund");
+    }
+
+    @Test
+    public void testFindChildren() {
+        List<String> matchedChildren = zkTemplate.findChildren("/dev", "^[a-z]*[1-9]$");
     }
 }

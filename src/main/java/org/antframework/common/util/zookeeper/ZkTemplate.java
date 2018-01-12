@@ -15,7 +15,9 @@ import org.apache.curator.framework.recipes.cache.NodeCache;
 import org.apache.curator.framework.recipes.cache.NodeCacheListener;
 import org.apache.zookeeper.CreateMode;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * zookeeper操作类
@@ -145,6 +147,27 @@ public class ZkTemplate {
         } catch (Exception e) {
             return ExceptionUtils.rethrow(e);
         }
+    }
+
+    /**
+     * 查找子节点
+     *
+     * @param path         查找路径
+     * @param childPattern 子节点正则表达式
+     * @return 匹配的子节点（如果路径不存在则返回null）
+     */
+    public List<String> findChildren(String path, String childPattern) {
+        if (!checkExists(path)) {
+            return null;
+        }
+        List<String> matchedChildren = new ArrayList<>();
+        Pattern pattern = Pattern.compile(childPattern);
+        for (String child : getChildren(path)) {
+            if (pattern.matcher(child).matches()) {
+                matchedChildren.add(child);
+            }
+        }
+        return matchedChildren;
     }
 
     /**
