@@ -47,22 +47,34 @@ public class ZkTemplate {
     }
 
     /**
-     * 创建节点（路径中任何一个节点如果不存在，则会创建该节点）
+     * 创建节点（路径中任何父节点如果不存在，则会创建CreateMode.PERSISTENT类型的该父节点；只有路径中最有一个节点才会使用mode参数）
      *
      * @param path 节点路径
+     * @param mode 节点类型
+     * @return 被创建的节点路径
      */
-    public void createNode(String path) {
+    public String createNode(String path, CreateMode mode) {
         try {
-            StringBuilder pathBuilder = new StringBuilder();
-            for (String node : StringUtils.split(path, NODE_SEPARATOR)) {
-                pathBuilder.append(NODE_SEPARATOR).append(node);
-                if (checkExists(pathBuilder.toString())) {
-                    continue;
-                }
-                zkClient.create().withMode(CreateMode.PERSISTENT).forPath(pathBuilder.toString());
+            String[] pathParts = StringUtils.split(path, NODE_SEPARATOR);
+            if (pathParts.length <= 0) {
+                return path;
             }
+            // 创建路径中的父节点
+            StringBuilder pathBuilder = new StringBuilder();
+            for (int i = 0; i < pathParts.length - 1; i++) {
+                pathBuilder.append(NODE_SEPARATOR).append(pathParts[i]);
+                if (!checkExists(pathBuilder.toString())) {
+                    zkClient.create().withMode(CreateMode.PERSISTENT).forPath(pathBuilder.toString());
+                }
+            }
+            // 创建路径中的最后一个节点
+            pathBuilder.append(NODE_SEPARATOR).append(pathParts[pathParts.length - 1]);
+            if (mode.isSequential() || !checkExists(pathBuilder.toString())) {
+                return zkClient.create().withMode(mode).forPath(pathBuilder.toString());
+            }
+            return path;
         } catch (Exception e) {
-            ExceptionUtils.rethrow(e);
+            return ExceptionUtils.rethrow(e);
         }
     }
 
