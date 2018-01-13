@@ -11,8 +11,10 @@ package org.antframework.common.util.zookeeper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.recipes.cache.NodeCache;
 import org.apache.curator.framework.recipes.cache.NodeCacheListener;
+import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
 
 import java.util.ArrayList;
@@ -27,6 +29,53 @@ public class ZkTemplate {
      * 路径中节点分隔符
      */
     public static final char NODE_SEPARATOR = '/';
+    /**
+     * zookeeper链接地址分隔符
+     */
+    public static final char ZK_URL_SEPARATOR = ',';
+
+    /**
+     * 创建ZkTemplate
+     *
+     * @param zkUrls    zookeeper地址（ip:端口）
+     * @param namespace 命名空间
+     * @return zkTemplate
+     */
+    public static ZkTemplate create(String[] zkUrls, String namespace) {
+        CuratorFramework zkClient = CuratorFrameworkFactory.builder()
+                .connectString(StringUtils.join(zkUrls, ZK_URL_SEPARATOR))
+                .namespace(namespace)
+                .retryPolicy(new ExponentialBackoffRetry(1000, 10))
+                .build();
+        zkClient.start();
+
+        return new ZkTemplate(zkClient);
+    }
+
+    /**
+     * 构建路径
+     *
+     * @param pathParts 路径片段
+     */
+    public static String buildPath(String... pathParts) {
+        if (pathParts == null) {
+            return null;
+        }
+        StringBuilder pathBuilder = new StringBuilder();
+        for (String pathPart : pathParts) {
+            if (!pathPart.startsWith(Character.toString(NODE_SEPARATOR))) {
+                pathBuilder.append(NODE_SEPARATOR);
+            }
+            pathBuilder.append(pathPart);
+            if (pathBuilder.length() > 0 && pathBuilder.charAt(pathBuilder.length() - 1) == NODE_SEPARATOR) {
+                pathBuilder.deleteCharAt(pathBuilder.length() - 1);
+            }
+        }
+        if (pathBuilder.length() <= 0) {
+            pathBuilder.append(NODE_SEPARATOR);
+        }
+        return pathBuilder.toString();
+    }
 
     // zookeeper客户端
     private CuratorFramework zkClient;
@@ -175,35 +224,17 @@ public class ZkTemplate {
     }
 
     /**
-     * 构建路径
-     *
-     * @param pathParts 路径片段
-     */
-    public static String buildPath(String... pathParts) {
-        if (pathParts == null) {
-            return null;
-        }
-        StringBuilder pathBuilder = new StringBuilder();
-        for (String pathPart : pathParts) {
-            if (!pathPart.startsWith(Character.toString(NODE_SEPARATOR))) {
-                pathBuilder.append(NODE_SEPARATOR);
-            }
-            pathBuilder.append(pathPart);
-            if (pathBuilder.length() > 0 && pathBuilder.charAt(pathBuilder.length() - 1) == NODE_SEPARATOR) {
-                pathBuilder.deleteCharAt(pathBuilder.length() - 1);
-            }
-        }
-        if (pathBuilder.length() <= 0) {
-            pathBuilder.append(NODE_SEPARATOR);
-        }
-        return pathBuilder.toString();
-    }
-
-    /**
      * 获取zkClient
      */
     public CuratorFramework getZkClient() {
         return zkClient;
+    }
+
+    /**
+     * 关闭（释放zookeeper链接）
+     */
+    public void close() {
+        zkClient.close();
     }
 
     /**
