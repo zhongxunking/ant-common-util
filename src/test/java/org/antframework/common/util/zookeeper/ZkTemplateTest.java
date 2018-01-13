@@ -8,10 +8,8 @@
  */
 package org.antframework.common.util.zookeeper;
 
-import org.apache.curator.framework.CuratorFramework;
-import org.apache.curator.framework.CuratorFrameworkFactory;
-import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -23,23 +21,16 @@ import java.util.List;
  */
 @Ignore
 public class ZkTemplateTest {
-    private static final String zkUrl = "localhost:2181";
-
     private ZkTemplate zkTemplate;
 
     @Before
-    public void init() throws InterruptedException {
-        CuratorFramework zkClient = CuratorFrameworkFactory.builder()
-                .connectString(zkUrl)
-                .namespace("ant-common-util/test")
-                .retryPolicy(new ExponentialBackoffRetry(1000, 10))
-                .build();
-        zkClient.start();
-        if (!zkClient.getZookeeperClient().blockUntilConnectedOrTimedOut()) {
-            throw new RuntimeException(String.format("连接zookeeper[%s]失败", zkUrl));
-        }
+    public void init() {
+        zkTemplate = ZkTemplate.create(new String[]{"localhost:2181"}, "ant-common-util/test");
+    }
 
-        zkTemplate = new ZkTemplate(zkClient);
+    @After
+    public void close() {
+        zkTemplate.close();
     }
 
     @Test
