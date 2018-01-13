@@ -139,10 +139,13 @@ public class ZkTemplate {
      * 获取子节点
      *
      * @param path 父节点路径
-     * @return 子节点名称
+     * @return 子节点名称（如果父节点路径不存在则返回null）
      */
     public List<String> getChildren(String path) {
         try {
+            if (!checkExists(path)) {
+                return null;
+            }
             return zkClient.getChildren().forPath(path);
         } catch (Exception e) {
             return ExceptionUtils.rethrow(e);
@@ -152,17 +155,18 @@ public class ZkTemplate {
     /**
      * 查找子节点
      *
-     * @param path         查找路径
+     * @param path         父节点路径
      * @param childPattern 子节点正则表达式
-     * @return 匹配的子节点（如果路径不存在则返回null）
+     * @return 匹配的子节点（如果父节点路径不存在则返回null）
      */
     public List<String> findChildren(String path, String childPattern) {
-        if (!checkExists(path)) {
+        List<String> children = getChildren(path);
+        if (children == null) {
             return null;
         }
         List<String> matchedChildren = new ArrayList<>();
         Pattern pattern = Pattern.compile(childPattern);
-        for (String child : getChildren(path)) {
+        for (String child : children) {
             if (pattern.matcher(child).matches()) {
                 matchedChildren.add(child);
             }
