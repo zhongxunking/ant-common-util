@@ -13,10 +13,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.io.*;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * map文件
@@ -37,27 +34,30 @@ public class MapFile {
     }
 
     /**
+     * 文件是否存在
+     */
+    public boolean exists() {
+        return file.exists();
+    }
+
+    /**
      * 读取value
      *
      * @param key 读取的key
-     * @return key对应的value（如果文件不存在或不存在该key，则返回null）
+     * @return key对应的value（如果文件不存在或不存在该key或对应的value为null，则返回null）
      */
     public String read(String key) {
-        Map<String, String> map = readAll();
-        if (map == null) {
-            return null;
-        }
-        return map.get(key);
+        return readAll().get(key);
     }
 
     /**
      * 读取整个map
      *
-     * @return map（如果文件不存在，则返回null）
+     * @return map（如果文件不存在，则返回空map）
      */
     public Map<String, String> readAll() {
-        if (!file.exists()) {
-            return null;
+        if (!exists()) {
+            return new HashMap<>();
         }
         try {
             InputStream in = null;
@@ -81,16 +81,11 @@ public class MapFile {
      *
      * @param key   被存储的key
      * @param value 被存储的value
-     * @return key对应的旧value（如果文件不存在或不存在旧value，则返回null）
      */
-    public synchronized String store(String key, String value) {
-        Map<String, String> map = readAll();
-        if (map == null) {
-            map = new HashMap<>();
-        }
-        String oldValue = map.put(key, value);
+    public synchronized void store(String key, String value) {
+        Map<String, String> map = new HashMap<>();
+        map.put(key, value);
         storeAll(map);
-        return oldValue;
     }
 
     /**
@@ -99,13 +94,24 @@ public class MapFile {
      * @param map 被存储的map
      */
     public synchronized void storeAll(Map<String, String> map) {
+        Map<String, String> newMap = readAll();
+        newMap.putAll(map);
+        replace(newMap);
+    }
+
+    /**
+     * 以新map替换整个旧map
+     *
+     * @param newMap 新map
+     */
+    public synchronized void replace(Map<String, String> newMap) {
         // 如果文件不存在，则创建
         FileUtils.createFileIfAbsent(file.getPath());
         try {
             OutputStream out = null;
             try {
                 out = new FileOutputStream(file);
-                mapToProps(map).store(out, "updated at " + DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+                mapToProps(newMap).store(out, "updated at " + DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
             } finally {
                 if (out != null) {
                     out.close();
@@ -114,6 +120,24 @@ public class MapFile {
         } catch (IOException e) {
             ExceptionUtils.rethrow(e);
         }
+    }
+
+    /**
+     * 删除指定key
+     *
+     * @param key 需被删除的key
+     */
+    public synchronized void remove(String key) {
+        Map<String, String> newMap = readAll();
+        newMap.remove(key);
+        replace(newMap);
+    }
+
+    /**
+     * 清除整个map
+     */
+    public synchronized void clear() {
+        replace(Collections.EMPTY_MAP);
     }
 
     // Properties转Map
