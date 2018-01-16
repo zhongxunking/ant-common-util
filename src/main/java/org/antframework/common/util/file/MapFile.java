@@ -111,7 +111,7 @@ public class MapFile {
             OutputStream out = null;
             try {
                 out = new FileOutputStream(file);
-                mapToProps(newMap).store(out, "updated at " + DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+                mapToProps(newMap).store(out, "updated at " + DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss.SSS"));
             } finally {
                 if (out != null) {
                     out.close();
