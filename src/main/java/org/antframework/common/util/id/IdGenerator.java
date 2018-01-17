@@ -41,6 +41,9 @@ public class IdGenerator {
      * @param cacheFilePath 缓存文件路径（null表示不使用缓存文件）
      */
     public IdGenerator(PeriodType periodType, int initAmount, Long maxId, String cacheFilePath) {
+        if (periodType == null || initAmount <= 0 || (maxId != null && maxId <= 0)) {
+            throw new IllegalArgumentException("创建id生成器的参数非法");
+        }
         this.maxId = maxId;
         this.initAmount = initAmount;
         // 初始化id锚
