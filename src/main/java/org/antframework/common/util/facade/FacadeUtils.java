@@ -125,6 +125,9 @@ public class FacadeUtils {
 
         @Override
         public T convert(S source) {
+            if (source == null) {
+                return null;
+            }
             T target = BeanUtils.instantiate(targetClass);
             BeanUtils.copyProperties(source, target);
             return target;
