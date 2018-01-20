@@ -44,8 +44,8 @@ public class IdGenerator {
         if (periodType == null || initAmount <= 0 || (maxId != null && maxId <= 0)) {
             throw new IllegalArgumentException("创建id生成器的参数非法");
         }
-        this.maxId = maxId;
         this.initAmount = initAmount;
+        this.maxId = maxId;
         // 初始化id锚
         MapFile cacheFile = cacheFilePath == null ? null : new MapFile(cacheFilePath);
         idAnchor = initIdAnchor(periodType, cacheFile);
