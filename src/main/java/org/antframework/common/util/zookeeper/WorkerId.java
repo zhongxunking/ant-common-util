@@ -65,6 +65,7 @@ public class WorkerId {
             if (!zkTemplate.getZkClient().getZookeeperClient().blockUntilConnectedOrTimedOut()) {
                 throw new IllegalStateException(String.format("链接zookeeper%s失败", ToString.toString(zkUrls)));
             }
+            zkTemplate.createNode(nodePath, CreateMode.PERSISTENT);
             List<String> nodes = zkTemplate.findChildren(nodePath, String.format("^%s-[0-9]+$", worker));
             if (nodes.size() <= 0) {
                 zkTemplate.createNode(ZkTemplate.buildPath(nodePath, worker + "-"), CreateMode.PERSISTENT_SEQUENTIAL);
