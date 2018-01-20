@@ -9,7 +9,9 @@
 package org.antframework.common.util.zookeeper;
 
 import org.antframework.common.util.file.MapFile;
+import org.antframework.common.util.tostring.ToString;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +49,7 @@ public class WorkerId {
                 }
                 fromZk = false;
             } else {
-                throw e;
+                return ExceptionUtils.rethrow(e);
             }
         }
         if (fromZk && cacheFile != null) {
@@ -57,13 +59,16 @@ public class WorkerId {
     }
 
     // 从zookeeper获取id
-    private static String getIdFromZk(String worker, String[] zkUrls, String nodePath) {
-        ZkTemplate zkTemplate = ZkTemplate.create(zkUrls, nodePath);
+    private static String getIdFromZk(String worker, String[] zkUrls, String nodePath) throws InterruptedException {
+        ZkTemplate zkTemplate = ZkTemplate.create(zkUrls, "");
         try {
-            List<String> nodes = zkTemplate.findChildren(ZkTemplate.buildPath(), String.format("^%s-[0-9]+$", worker));
+            if (!zkTemplate.getZkClient().getZookeeperClient().blockUntilConnectedOrTimedOut()) {
+                throw new IllegalStateException(String.format("链接zookeeper%s失败", ToString.toString(zkUrls)));
+            }
+            List<String> nodes = zkTemplate.findChildren(nodePath, String.format("^%s-[0-9]+$", worker));
             if (nodes.size() <= 0) {
-                zkTemplate.createNode(ZkTemplate.buildPath(worker + "-"), CreateMode.PERSISTENT_SEQUENTIAL);
-                nodes = zkTemplate.findChildren(ZkTemplate.buildPath(), String.format("^%s-[0-9]+$", worker));
+                zkTemplate.createNode(ZkTemplate.buildPath(nodePath, worker + "-"), CreateMode.PERSISTENT_SEQUENTIAL);
+                nodes = zkTemplate.findChildren(nodePath, String.format("^%s-[0-9]+$", worker));
             }
             if (nodes.size() != 1) {
                 throw new IllegalStateException(String.format("worker[%s]在zookeeper上注册的数量[%d]不为1", worker, nodes.size()));

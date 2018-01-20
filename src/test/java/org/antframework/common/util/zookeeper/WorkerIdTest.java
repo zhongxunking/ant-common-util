@@ -19,6 +19,6 @@ public class WorkerIdTest {
 
     @Test
     public void testGetId() {
-        int workerId=WorkerId.getId("aaa", new String[]{"localhost:2181"}, "dev2/workerId", System.getProperty("user.home")+"/dd/workerId.properties");
+        int workerId = WorkerId.getId("ccc", new String[]{"localhost:2181"}, "/dev2/workerId", System.getProperty("user.home") + "/dd/workerId.properties");
     }
 }
