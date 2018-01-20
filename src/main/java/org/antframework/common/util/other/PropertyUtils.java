@@ -13,7 +13,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * 属性工具类
+ * 属性工具类（从系统属性和系统环境中操作属性）
  */
 public class PropertyUtils {
 
@@ -28,6 +28,21 @@ public class PropertyUtils {
         String value = getProperty(key);
         if (value == null) {
             value = defValue;
+        }
+        return value;
+    }
+
+    /**
+     * 获取属性
+     *
+     * @param key 属性key
+     * @return 属性值
+     * @throws IllegalArgumentException 如果不存在该属性
+     */
+    public static String getRequiredProperty(String key) {
+        String value = getProperty(key);
+        if (value == null) {
+            throw new IllegalArgumentException("系统属性和系统环境中不存在属性" + key);
         }
         return value;
     }

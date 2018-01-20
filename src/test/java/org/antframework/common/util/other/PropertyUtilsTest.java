@@ -24,5 +24,15 @@ public class PropertyUtilsTest {
         Assert.assertEquals(1, PropertyUtils.toEnvKeys("AABBCCDD").length);
         Assert.assertEquals(null, PropertyUtils.getProperty("aa.bb-cc.dd"));
         Assert.assertEquals("myvalue", PropertyUtils.getProperty("aa.bb-cc.dd", "myvalue"));
+
+        System.setProperty("PropertyUtilsTest.aa", "123");
+        Assert.assertEquals("123", PropertyUtils.getRequiredProperty("PropertyUtilsTest.aa"));
+
+        try {
+            PropertyUtils.getRequiredProperty("PropertyUtilsTest.bb");
+            throw new RuntimeException("失败");
+        } catch (IllegalArgumentException e) {
+            int a = 0;
+        }
     }
 }
