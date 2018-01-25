@@ -8,8 +8,8 @@
  */
 package org.antframework.common.util.other;
 
-import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -19,6 +19,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @param <V> 缓存value类型
  */
 public class Cache<K, V> {
+    // null占位符
+    private static final Object NULL_VALUE = new Object();
     // 存放缓存的map
     private final Map<K, V> map = new ConcurrentHashMap<>();
     // 缓存提供者
@@ -37,7 +39,7 @@ public class Cache<K, V> {
      * 获取缓存（如果该缓存不存在，则调用缓存提供者获取缓存）
      *
      * @param key 缓存key
-     * @return null 如果缓存不存在且缓存提供者也不提供该缓存
+     * @return null 如果缓存提供者提供null
      */
     public V get(K key) {
         V value = map.get(key);
@@ -45,23 +47,21 @@ public class Cache<K, V> {
             synchronized (map) {
                 value = map.get(key);
                 if (value == null) {
-                    value = supplier.get(key);
-                    if (value != null) {
-                        map.put(key, value);
-                    }
+                    value = toSavable(supplier.get(key));
+                    map.put(key, value);
                 }
             }
         }
-        return value;
+        return toOriginal(value);
     }
 
     /**
-     * 获取所有缓存
+     * 获取缓存中所有的key
      *
-     * @return 包含所有缓存的不可修改map
+     * @return 缓存中所有的key
      */
-    public Map<K, V> getAll() {
-        return Collections.unmodifiableMap(map);
+    public Set<K> getAllKeys() {
+        return map.keySet();
     }
 
     /**
@@ -81,6 +81,16 @@ public class Cache<K, V> {
         map.clear();
     }
 
+    // 转换为可保存value
+    private static <V> V toSavable(V original) {
+        return original != null ? original : (V) NULL_VALUE;
+    }
+
+    // 转换为原始vale
+    private static <V> V toOriginal(V savable) {
+        return savable != NULL_VALUE ? savable : null;
+    }
+
     /**
      * 缓存提供者
      *
@@ -93,7 +103,7 @@ public class Cache<K, V> {
          * 获取缓存value
          *
          * @param key 缓存key
-         * @return null 如果不能提供该缓存
+         * @return null 如果该缓存为null
          */
         V get(K key);
     }
