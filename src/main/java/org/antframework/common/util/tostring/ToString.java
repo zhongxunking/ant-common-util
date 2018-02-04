@@ -30,7 +30,7 @@ public class ToString {
     // 正在被解析对象的持有器（用于检查循环引用）
     private static final ThreadLocal<Set> APPENDING_OBJS_HOLDER = new ThreadLocal<>();
     // 内部附加器（通过反射解析对象内部字段）
-    private static final Appender INNER_APPENDER = new ObjInnerAppender();
+    private static final Appender INNER_APPENDER = new InnerAppender();
     // 优先附加器（优先使用本list中的附加器解析对象）
     private static final List<Appender> PRIOR_APPENDERS;
 
@@ -226,11 +226,11 @@ public class ToString {
     }
 
     // 反射解析对象内部属性的附加器（会转换成User{name="XXX",age=20}这种格式）
-    private static class ObjInnerAppender implements Appender {
+    private static class InnerAppender implements Appender {
         // 执行器缓存（每种类型只会在第一次执行时才会进行解析）
-        private static final Cache<Class, ObjInnerAppenderExecutor> EXECUTOR_CACHE = new Cache<>(new Cache.Supplier<Class, ObjInnerAppenderExecutor>() {
+        private static final Cache<Class, InnerAppenderExecutor> EXECUTOR_CACHE = new Cache<>(new Cache.Supplier<Class, InnerAppenderExecutor>() {
             @Override
-            public ObjInnerAppenderExecutor get(Class key) {
+            public InnerAppenderExecutor get(Class key) {
                 return parse(key);
             }
         });
@@ -246,7 +246,7 @@ public class ToString {
         }
 
         // 解析（将clazz及其继承的所有非静态属性解析出来，对于指定了formatter的属性则初始化该属性的formatter）
-        private static ObjInnerAppenderExecutor parse(Class clazz) {
+        private static InnerAppenderExecutor parse(Class clazz) {
             List<Field> fields = new ArrayList<>();
             Map<Field, FieldFormatter> formatterMap = new HashMap<>();
             for (Class parsingClass = clazz; parsingClass != null; parsingClass = parsingClass.getSuperclass()) {
@@ -270,11 +270,11 @@ public class ToString {
                 fields.addAll(0, parsingFields);
             }
 
-            return new ObjInnerAppenderExecutor(ClassUtils.getShortName(clazz), fields, formatterMap);
+            return new InnerAppenderExecutor(ClassUtils.getShortName(clazz), fields, formatterMap);
         }
 
         // 执行器
-        private static class ObjInnerAppenderExecutor {
+        private static class InnerAppenderExecutor {
             // 类名（简写）
             private String className;
             // 字段
@@ -282,7 +282,7 @@ public class ToString {
             // 字段格式化器Map
             private Map<Field, FieldFormatter> formatterMap;
 
-            public ObjInnerAppenderExecutor(String className, List<Field> fields, Map<Field, FieldFormatter> formatterMap) {
+            public InnerAppenderExecutor(String className, List<Field> fields, Map<Field, FieldFormatter> formatterMap) {
                 this.className = className;
                 this.fields = fields;
                 this.formatterMap = formatterMap;
