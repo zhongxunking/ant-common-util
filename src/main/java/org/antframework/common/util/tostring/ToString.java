@@ -213,12 +213,11 @@ public class ToString {
         public void append(StringBuilder builder, Object array) {
             builder.append('[');
 
-            int length = Array.getLength(array);
-            for (int i = 0; i < length; i++) {
-                ToString.append(builder, Array.get(array, i));
+            for (Object obj : (Object[]) array) {
+                ToString.append(builder, obj);
                 builder.append(',');
             }
-            if (length > 0) {
+            if (Array.getLength(array) > 0) {
                 builder.deleteCharAt(builder.length() - 1);
             }
 
