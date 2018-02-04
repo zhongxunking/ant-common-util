@@ -22,11 +22,11 @@ import java.util.List;
  * 查询参数解析器
  */
 public class QueryParamsParser {
-    // 缓存（每种类型只会在第一次执行时才会进行解析）
-    private static final Cache<Class, List<QueryParamParser>> CACHE = new Cache<>(new Cache.Supplier<Class, List<QueryParamParser>>() {
+    // 执行器缓存（每种类型只会在第一次执行时才会进行解析）
+    private static final Cache<Class, ParseExecutor> EXECUTOR_CACHE = new Cache<>(new Cache.Supplier<Class, ParseExecutor>() {
         @Override
-        public List<QueryParamParser> get(Class key) {
-            return parseToFieldParser(key);
+        public ParseExecutor get(Class key) {
+            return parseToExecutor(key);
         }
     });
 
@@ -37,18 +37,11 @@ public class QueryParamsParser {
      * @return 查询参数
      */
     public static List<QueryParam> parse(Object obj) {
-        List<QueryParam> queryParams = new ArrayList<>();
-        for (QueryParamParser fieldParser : CACHE.get(obj.getClass())) {
-            QueryParam queryParam = fieldParser.parse(obj);
-            if (queryParam != null) {
-                queryParams.add(queryParam);
-            }
-        }
-        return queryParams;
+        return EXECUTOR_CACHE.get(obj.getClass()).execute(obj);
     }
 
-    // 解析出字段解析器
-    private static List<QueryParamParser> parseToFieldParser(Class clazz) {
+    // 解析出执行器
+    private static ParseExecutor parseToExecutor(Class clazz) {
         List<QueryParamParser> parsers = new ArrayList<>();
         for (Class parsingClass = clazz; parsingClass != null; parsingClass = parsingClass.getSuperclass()) {
             for (Field field : parsingClass.getDeclaredFields()) {
@@ -64,6 +57,28 @@ public class QueryParamsParser {
                 parsers.add(parser);
             }
         }
-        return parsers;
+        return new ParseExecutor(parsers);
+    }
+
+    // 解析执行器
+    private static class ParseExecutor {
+        // 解析器
+        private List<QueryParamParser> parsers;
+
+        public ParseExecutor(List<QueryParamParser> parsers) {
+            this.parsers = parsers;
+        }
+
+        // 执行
+        public List<QueryParam> execute(Object obj) {
+            List<QueryParam> queryParams = new ArrayList<>();
+            for (QueryParamParser fieldParser : parsers) {
+                QueryParam queryParam = fieldParser.parse(obj);
+                if (queryParam != null) {
+                    queryParams.add(queryParam);
+                }
+            }
+            return queryParams;
+        }
     }
 }
