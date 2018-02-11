@@ -182,7 +182,7 @@ int workerId = WorkerId.getId("IP:端口",    // worker编码（一般情况及�
 // 创建本地id生成器
 IdGenerator idGenerator = new IdGenerator(
         PeriodType.HOUR,    //  周期类型为小时（必填）
-        10000,      // id初始化数量（必填）
+        1000,      // 每次批量生成的id数量（必填，每次批量生成id都会进行一次文件io操作，建议不要设置的太小）
         1000000L,   // 一个周期内最大id（不包含，null表示不限制）
         "/var/idGenerator.properties");     // 缓存文件路径（null表示不使用缓存文件）
 
