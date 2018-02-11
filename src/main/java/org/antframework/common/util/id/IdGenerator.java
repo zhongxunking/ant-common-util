@@ -23,8 +23,8 @@ public class IdGenerator {
     // 缓存中id的key
     private static final String CACHE_ID_KEY = "id";
 
-    // 每次批量获取的id数量
-    private int initAmount;
+    // 每次批量生成的id数量
+    private int batchAmount;
     // 最大id
     private Long maxId;
     // id锚
@@ -36,15 +36,15 @@ public class IdGenerator {
      * 创建id生成器
      *
      * @param periodType    周期类型
-     * @param initAmount    每次批量获取的id数量
+     * @param batchAmount   每次批量生成的id数量
      * @param maxId         最大id（不包含。null表示不限制）
      * @param cacheFilePath 缓存文件路径（null表示不使用缓存文件）
      */
-    public IdGenerator(PeriodType periodType, int initAmount, Long maxId, String cacheFilePath) {
-        if (periodType == null || initAmount <= 0 || (maxId != null && maxId <= 0)) {
+    public IdGenerator(PeriodType periodType, int batchAmount, Long maxId, String cacheFilePath) {
+        if (periodType == null || batchAmount <= 0 || (maxId != null && maxId <= 0)) {
             throw new IllegalArgumentException("创建id生成器的参数非法");
         }
-        this.initAmount = initAmount;
+        this.batchAmount = batchAmount;
         this.maxId = maxId;
         // 初始化id锚
         MapFile cacheFile = cacheFilePath == null ? null : new MapFile(cacheFilePath);
@@ -112,7 +112,7 @@ public class IdGenerator {
             // 现代化
             modernize();
             // 创建批量id
-            long nextId = id + initAmount;
+            long nextId = id + batchAmount;
             if (nextId < id) {
                 throw new IllegalStateException("运算中超过long类型最大值，无法进行计算");
             }
