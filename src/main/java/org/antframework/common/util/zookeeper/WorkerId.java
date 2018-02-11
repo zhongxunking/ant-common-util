@@ -40,7 +40,7 @@ public class WorkerId {
         try {
             id = getIdFromZk(worker, zkUrls, nodePath);
         } catch (Throwable e) {
-            logger.error("从zookeeper上读取workerId出错:{}", e);
+            logger.error("从zookeeper上读取workerId出错：{}", e.getMessage());
             if (cacheFile != null) {
                 logger.warn("尝试从缓存文件读取workerId");
                 id = cacheFile.read(worker);
