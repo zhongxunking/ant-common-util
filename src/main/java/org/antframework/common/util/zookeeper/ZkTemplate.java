@@ -149,6 +149,20 @@ public class ZkTemplate {
     }
 
     /**
+     * 获取节点数据（节点不存在会抛异常）
+     *
+     * @param path 节点路径
+     * @return 节点数据
+     */
+    public byte[] getData(String path) {
+        try {
+            return zkClient.getData().forPath(path);
+        } catch (Exception e) {
+            return ExceptionUtils.rethrow(e);
+        }
+    }
+
+    /**
      * 给节点设置数据（节点不存在会抛异常）
      *
      * @param path 节点路径

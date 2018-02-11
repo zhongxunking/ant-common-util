@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.nio.charset.Charset;
 import java.util.List;
 
 /**
@@ -53,6 +54,14 @@ public class ZkTemplateTest {
     @Test
     public void testDeleteNode() {
         zkTemplate.deleteNode("/dev");
+    }
+
+    @Test
+    public void testGetData() {
+        zkTemplate.createNode("/a/b/c", CreateMode.PERSISTENT);
+        zkTemplate.setData("/a/b/c", "hello".getBytes(Charset.forName("utf-8")));
+        byte[] data = zkTemplate.getData("/a/b/c");
+        String hello = new String(data, Charset.forName("utf-8"));
     }
 
     @Test
