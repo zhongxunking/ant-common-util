@@ -16,7 +16,7 @@ import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import java.nio.charset.Charset;
 
 /**
  * workerId
@@ -66,16 +66,20 @@ public class WorkerId {
                 throw new IllegalStateException(String.format("链接zookeeper%s失败", ToString.toString(zkUrls)));
             }
             zkTemplate.createNode(nodePath, CreateMode.PERSISTENT);
-            List<String> nodes = zkTemplate.findChildren(nodePath, String.format("^%s-[0-9]+$", worker));
-            if (nodes.size() <= 0) {
-                zkTemplate.createNode(ZkTemplate.buildPath(nodePath, worker + "-"), CreateMode.PERSISTENT_SEQUENTIAL);
-                nodes = zkTemplate.findChildren(nodePath, String.format("^%s-[0-9]+$", worker));
+            // 构建worker节点路径
+            String workerPath = ZkTemplate.buildPath(nodePath, worker);
+            // 判断该worker是否已经在zookeeper上注册过
+            if (!zkTemplate.checkExists(workerPath)) {
+                // 创建worker的顺序节点
+                String createdPath = zkTemplate.createNode(workerPath + '-', CreateMode.PERSISTENT_SEQUENTIAL);
+                String[] parts = StringUtils.split(createdPath, '-');
+                // 创建worker节点
+                zkTemplate.createNode(workerPath, CreateMode.PERSISTENT);
+                // 设置workerId
+                zkTemplate.setData(workerPath, parts[parts.length - 1].getBytes(Charset.forName("utf-8")));
             }
-            if (nodes.size() != 1) {
-                throw new IllegalStateException(String.format("worker[%s]在zookeeper上注册的数量[%d]不为1", worker, nodes.size()));
-            }
-            String[] parts = StringUtils.split(nodes.get(0), '-');
-            return parts[parts.length - 1];
+
+            return new String(zkTemplate.getData(workerPath), Charset.forName("utf-8"));
         } finally {
             zkTemplate.close();
         }
