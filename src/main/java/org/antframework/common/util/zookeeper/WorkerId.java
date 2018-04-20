@@ -60,7 +60,7 @@ public class WorkerId {
 
     // 从zookeeper获取id
     private static String getIdFromZk(String worker, String[] zkUrls, String nodePath) throws InterruptedException {
-        ZkTemplate zkTemplate = ZkTemplate.create(zkUrls, "");
+        ZkTemplate zkTemplate = ZkTemplate.create(zkUrls, null);
         try {
             if (!zkTemplate.getZkClient().getZookeeperClient().blockUntilConnectedOrTimedOut()) {
                 throw new IllegalStateException(String.format("链接zookeeper%s失败", ToString.toString(zkUrls)));
