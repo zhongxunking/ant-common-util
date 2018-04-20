@@ -28,22 +28,18 @@ public class ZkTemplate {
     /**
      * 路径中节点分隔符
      */
-    public static final char NODE_SEPARATOR = '/';
-    /**
-     * zookeeper链接地址分隔符
-     */
-    public static final char ZK_URL_SEPARATOR = ',';
+    public static final char NODES_SEPARATOR = '/';
 
     /**
      * 创建ZkTemplate
      *
-     * @param zkUrls    zookeeper地址（ip:端口）
-     * @param namespace 命名空间
+     * @param zkUrls    zookeeper地址
+     * @param namespace 命名空间（null表示不使用命名空间，命名空间不能以"/"开头）
      * @return zkTemplate
      */
     public static ZkTemplate create(String[] zkUrls, String namespace) {
         CuratorFramework zkClient = CuratorFrameworkFactory.builder()
-                .connectString(StringUtils.join(zkUrls, ZK_URL_SEPARATOR))
+                .connectString(StringUtils.join(zkUrls, ','))
                 .namespace(namespace)
                 .retryPolicy(new ExponentialBackoffRetry(1000, 10))
                 .build();
@@ -63,16 +59,16 @@ public class ZkTemplate {
         }
         StringBuilder pathBuilder = new StringBuilder();
         for (String pathPart : pathParts) {
-            if (!pathPart.startsWith(Character.toString(NODE_SEPARATOR))) {
-                pathBuilder.append(NODE_SEPARATOR);
+            if (!pathPart.startsWith(Character.toString(NODES_SEPARATOR))) {
+                pathBuilder.append(NODES_SEPARATOR);
             }
             pathBuilder.append(pathPart);
-            if (pathBuilder.length() > 0 && pathBuilder.charAt(pathBuilder.length() - 1) == NODE_SEPARATOR) {
+            if (pathBuilder.length() > 0 && pathBuilder.charAt(pathBuilder.length() - 1) == NODES_SEPARATOR) {
                 pathBuilder.deleteCharAt(pathBuilder.length() - 1);
             }
         }
         if (pathBuilder.length() <= 0) {
-            pathBuilder.append(NODE_SEPARATOR);
+            pathBuilder.append(NODES_SEPARATOR);
         }
         return pathBuilder.toString();
     }
@@ -106,20 +102,20 @@ public class ZkTemplate {
      */
     public String createNode(String path, CreateMode mode) {
         try {
-            String[] pathParts = StringUtils.split(path, NODE_SEPARATOR);
+            String[] pathParts = StringUtils.split(path, NODES_SEPARATOR);
             if (pathParts.length <= 0) {
                 return path;
             }
             // 创建路径中的父节点
             StringBuilder pathBuilder = new StringBuilder();
             for (int i = 0; i < pathParts.length - 1; i++) {
-                pathBuilder.append(NODE_SEPARATOR).append(pathParts[i]);
+                pathBuilder.append(NODES_SEPARATOR).append(pathParts[i]);
                 if (!checkExists(pathBuilder.toString())) {
                     zkClient.create().withMode(CreateMode.PERSISTENT).forPath(pathBuilder.toString());
                 }
             }
             // 创建路径中的最后一个节点
-            pathBuilder.append(NODE_SEPARATOR).append(pathParts[pathParts.length - 1]);
+            pathBuilder.append(NODES_SEPARATOR).append(pathParts[pathParts.length - 1]);
             if (mode.isSequential() || !checkExists(pathBuilder.toString())) {
                 return zkClient.create().withMode(mode).forPath(pathBuilder.toString());
             }
