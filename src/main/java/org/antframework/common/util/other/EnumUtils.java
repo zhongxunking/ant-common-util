@@ -72,10 +72,9 @@ public class EnumUtils {
         StringBuilder builder = new StringBuilder();
         int index = 0;
         while (matcher.find()) {
-            builder.append(camelCaseName.substring(index, matcher.start()));
-            String matchedStr = matcher.group();
-            builder.append(matchedStr.charAt(0)).append('_').append(matchedStr.charAt(1));
-            index = matcher.end();
+            builder.append(camelCaseName.substring(index, matcher.start() + 1));
+            builder.append('_');
+            index = matcher.end() - 1;
         }
         builder.append(camelCaseName.substring(index));
 
