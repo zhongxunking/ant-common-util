@@ -22,6 +22,11 @@ public class MapFileTest {
     private MapFile mapFile = new MapFile(System.getProperty("user.home") + "/aa/bb.properties");
 
     @Test
+    public void testGetFilePath() {
+        String filePath = mapFile.getFilePath();
+    }
+
+    @Test
     public void testExists() {
         boolean exists = mapFile.exists();
     }

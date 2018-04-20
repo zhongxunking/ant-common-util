@@ -34,6 +34,13 @@ public class MapFile {
     }
 
     /**
+     * 获取文件路径
+     */
+    public String getFilePath() {
+        return file.getPath();
+    }
+
+    /**
      * 文件是否存在
      */
     public boolean exists() {
