@@ -45,7 +45,7 @@ public final class WorkerId {
                 logger.warn("尝试从缓存文件读取workerId");
                 id = cacheFile.read(worker);
                 if (id == null) {
-                    throw new IllegalStateException(String.format("不存在缓存文件[%s]或缓存文件内无workerId", cacheFile.getFilePath()));
+                    throw new IllegalStateException(String.format("不存在缓存文件[%s]或缓存文件内无worker[%s]的workerId", cacheFile.getFilePath(), worker));
                 }
                 fromZk = false;
             } else {
