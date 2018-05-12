@@ -14,6 +14,12 @@ import org.antframework.common.util.query.QueryOperator;
  * 不等于null查询条件解析器
  */
 public class NotNullQueryParamParser extends AbstractQueryParamParser {
+
+    @Override
+    protected boolean isQueryParam(Object rawValue) {
+        return true;
+    }
+
     @Override
     protected QueryOperator getOperator() {
         return QueryOperator.NOTNULL;
