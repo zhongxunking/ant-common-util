@@ -20,7 +20,7 @@ import java.util.Collection;
 /**
  * facade工具类
  */
-public class FacadeUtils {
+public final class FacadeUtils {
     // 分页查询result的info类型缓存
     private static final Cache<Class, Class> INFO_CLASS_CACHE = new Cache<>(new Cache.Supplier<Class, Class>() {
         @Override

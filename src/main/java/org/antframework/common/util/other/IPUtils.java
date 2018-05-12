@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * ip工具类
  */
-public class IPUtils {
+public final class IPUtils {
     /**
      * ipv4环回地址
      */

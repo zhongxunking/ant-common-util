@@ -20,7 +20,7 @@ import java.util.*;
 /**
  * 注解位置定位器
  */
-public class AnnotationLocator {
+public final class AnnotationLocator {
     // 正在被解析对象的持有器（用于检查循环引用）
     private static final ThreadLocal<Set<Object>> APPENDING_OBJS_HOLDER = new ThreadLocal<>();
     // 附加器

@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 /**
  * 枚举工具类
  */
-public class EnumUtils {
+public final class EnumUtils {
     // 驼峰命名正则表达式
     private static final Pattern CAMEL_CASE_PATTERN = Pattern.compile("[a-z0-9][A-Z]");
     // 枚举命名正则表达式

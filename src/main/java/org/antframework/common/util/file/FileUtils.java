@@ -14,7 +14,7 @@ import java.io.IOException;
 /**
  * 文件工具类
  */
-public class FileUtils {
+public final class FileUtils {
 
     /**
      * 如果文件不存在，则创建该文件

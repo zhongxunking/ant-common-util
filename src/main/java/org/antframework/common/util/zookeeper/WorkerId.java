@@ -21,7 +21,7 @@ import java.nio.charset.Charset;
 /**
  * workerId
  */
-public class WorkerId {
+public final class WorkerId {
     private static final Logger logger = LoggerFactory.getLogger(WorkerId.class);
 
     /**

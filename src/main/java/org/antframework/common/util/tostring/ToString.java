@@ -24,7 +24,7 @@ import java.util.*;
 /**
  * 将对象转换成字符串工具类
  */
-public class ToString {
+public final class ToString {
     // null字符串
     private static final String NULL_STRING = "null";
     // 正在被解析对象的持有器（用于检查循环引用）

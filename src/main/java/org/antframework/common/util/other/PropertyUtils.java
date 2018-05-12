@@ -15,7 +15,7 @@ import java.util.Set;
 /**
  * 属性工具类（从系统属性和系统环境中操作属性）
  */
-public class PropertyUtils {
+public final class PropertyUtils {
 
     /**
      * 获取属性
