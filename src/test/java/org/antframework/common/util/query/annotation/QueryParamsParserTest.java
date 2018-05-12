@@ -37,7 +37,7 @@ public class QueryParamsParserTest {
         order.setDrink("coffee");
         order.setFrends(new String[]{"张三", "李四"});
 
-        List<QueryParam> queryParams = QueryParamsParser.parse(order);
+        List<QueryParam> queryParams = QueryParams.parse(order);
         Assert.assertEquals(13, queryParams.size());
 
 
@@ -55,7 +55,7 @@ public class QueryParamsParserTest {
 //        order.setEat("orange");
         order.setDrink("coffee");
         order.setFrends(new String[]{"张三", "李四"});
-        queryParams = QueryParamsParser.parse(order);
+        queryParams = QueryParams.parse(order);
         Assert.assertEquals(11, queryParams.size());
     }
 
@@ -80,7 +80,7 @@ public class QueryParamsParserTest {
 
         long startTime = System.currentTimeMillis();
         for (int i = 0; i < count; i++) {
-            List<QueryParam> queryParams = QueryParamsParser.parse(order);
+            List<QueryParam> queryParams = QueryParams.parse(order);
         }
         long costTime = System.currentTimeMillis() - startTime;
         System.out.println(String.format("循环：%d次，总耗时：%d毫秒，平均耗时：%d纳秒", count, costTime, costTime * 1000 * 1000 / count));

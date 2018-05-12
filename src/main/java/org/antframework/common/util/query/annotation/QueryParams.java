@@ -19,9 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 查询参数解析器
+ * 查询参数解析工具类
  */
-public class QueryParamsParser {
+public final class QueryParams {
     // 执行器缓存（每种类型只会在第一次执行时才会进行解析）
     private static final Cache<Class, ParseExecutor> EXECUTOR_CACHE = new Cache<>(new Cache.Supplier<Class, ParseExecutor>() {
         @Override
