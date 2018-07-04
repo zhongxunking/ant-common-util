@@ -19,7 +19,9 @@ public enum CommonResultCode {
 
     INVALID_PARAMETER("common-0002", "请求参数非法"),
 
-    ILLEGAL_STATE("common-0003", "非法内部状态"),;
+    ILLEGAL_STATE("common-0003", "非法内部状态"),
+
+    UNAUTHORIZED("common-0004", "未授权"),;
 
     // 结果码
     private String code;
