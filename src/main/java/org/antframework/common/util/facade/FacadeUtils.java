@@ -31,6 +31,17 @@ public final class FacadeUtils {
     });
 
     /**
+     * 断言result为成功
+     *
+     * @param result 被断言的result
+     */
+    public static void assertSuccess(AbstractResult result) {
+        if (!result.isSuccess()) {
+            throw new BizException(result.getStatus(), result.getCode(), result.getMessage());
+        }
+    }
+
+    /**
      * 计算总页数
      *
      * @param totalCount 记录总数
