@@ -19,16 +19,19 @@ import org.apache.zookeeper.CreateMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 /**
  * zookeeper操作类
  */
 public class ZkTemplate {
-    /**
-     * 路径中节点分隔符
-     */
-    public static final char NODES_SEPARATOR = '/';
+    // 基本睡眠时间（毫秒）
+    private static final int BASE_SLEEP_TIME_MS = 1000;
+    // 最多重试次数
+    private static final int MAX_RETRIES = 10;
+    // 路径中节点分隔符
+    private static final char NODES_SEPARATOR = '/';
 
     /**
      * 创建ZkTemplate
@@ -41,7 +44,7 @@ public class ZkTemplate {
         CuratorFramework zkClient = CuratorFrameworkFactory.builder()
                 .connectString(StringUtils.join(zkUrls, ','))
                 .namespace(namespace)
-                .retryPolicy(new ExponentialBackoffRetry(1000, 10))
+                .retryPolicy(new ExponentialBackoffRetry(BASE_SLEEP_TIME_MS, MAX_RETRIES))
                 .build();
         zkClient.start();
 
@@ -86,6 +89,7 @@ public class ZkTemplate {
      * @param path 节点路径
      */
     public boolean checkExists(String path) {
+        ensureConnected();
         try {
             return zkClient.checkExists().forPath(path) != null;
         } catch (Exception e) {
@@ -101,6 +105,7 @@ public class ZkTemplate {
      * @return 被创建的节点路径
      */
     public String createNode(String path, CreateMode mode) {
+        ensureConnected();
         try {
             String[] pathParts = StringUtils.split(path, NODES_SEPARATOR);
             if (pathParts.length <= 0) {
@@ -131,6 +136,7 @@ public class ZkTemplate {
      * @param path 节点路径
      */
     public void deleteNode(String path) {
+        ensureConnected();
         try {
             if (!checkExists(path)) {
                 return;
@@ -151,6 +157,7 @@ public class ZkTemplate {
      * @return 节点数据
      */
     public byte[] getData(String path) {
+        ensureConnected();
         try {
             return zkClient.getData().forPath(path);
         } catch (Exception e) {
@@ -165,6 +172,7 @@ public class ZkTemplate {
      * @param data 数据
      */
     public void setData(String path, byte[] data) {
+        ensureConnected();
         try {
             zkClient.setData().forPath(path, data);
         } catch (Exception e) {
@@ -181,6 +189,7 @@ public class ZkTemplate {
      * @return 底层NodeCache
      */
     public NodeCache listenNode(String path, boolean initCallListener, NodeListener... listeners) {
+        ensureConnected();
         try {
             NodeCache nodeCache = new NodeCache(zkClient, path);
             for (NodeListener listener : listeners) {
@@ -201,6 +210,7 @@ public class ZkTemplate {
      * @return 子节点名称（如果父节点路径不存在则返回null）
      */
     public List<String> getChildren(String path) {
+        ensureConnected();
         try {
             if (!checkExists(path)) {
                 return null;
@@ -245,6 +255,18 @@ public class ZkTemplate {
      */
     public void close() {
         zkClient.close();
+    }
+
+    // 确保已成功链接zookeeper或者等待超时
+    private void ensureConnected() {
+        try {
+            boolean connected = zkClient.blockUntilConnected(BASE_SLEEP_TIME_MS * MAX_RETRIES, TimeUnit.MILLISECONDS);
+            if (!connected) {
+                throw new IllegalStateException(String.format("链接zookeeper[%s]失败", zkClient.getZookeeperClient().getCurrentConnectionString()));
+            }
+        } catch (InterruptedException e) {
+            ExceptionUtils.rethrow(e);
+        }
     }
 
     /**
