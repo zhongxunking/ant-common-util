@@ -9,7 +9,6 @@
 package org.antframework.common.util.zookeeper;
 
 import org.antframework.common.util.file.MapFile;
-import org.antframework.common.util.tostring.ToString;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.zookeeper.CreateMode;
@@ -62,9 +61,6 @@ public final class WorkerId {
     private static String getIdFromZk(String worker, String[] zkUrls, String nodePath) throws InterruptedException {
         ZkTemplate zkTemplate = ZkTemplate.create(zkUrls, null);
         try {
-            if (!zkTemplate.getZkClient().getZookeeperClient().blockUntilConnectedOrTimedOut()) {
-                throw new IllegalStateException(String.format("链接zookeeper%s失败", ToString.toString(zkUrls)));
-            }
             zkTemplate.createNode(nodePath, CreateMode.PERSISTENT);
             // 构建worker节点路径
             String workerPath = ZkTemplate.buildPath(nodePath, worker);
