@@ -26,6 +26,8 @@ import java.util.regex.Pattern;
  * zookeeper操作类
  */
 public class ZkTemplate {
+    // zookeeper地址分隔符
+    private static final char ZK_URLS_SEPARATOR = ',';
     // 基本睡眠时间（毫秒）
     private static final int BASE_SLEEP_TIME_MS = 1000;
     // 最多重试次数
@@ -42,7 +44,7 @@ public class ZkTemplate {
      */
     public static ZkTemplate create(String[] zkUrls, String namespace) {
         CuratorFramework zkClient = CuratorFrameworkFactory.builder()
-                .connectString(StringUtils.join(zkUrls, ','))
+                .connectString(StringUtils.join(zkUrls, ZK_URLS_SEPARATOR))
                 .namespace(namespace)
                 .retryPolicy(new ExponentialBackoffRetry(BASE_SLEEP_TIME_MS, MAX_RETRIES))
                 .build();
@@ -244,6 +246,23 @@ public class ZkTemplate {
     }
 
     /**
+     * 获取zookeeper地址
+     */
+    public String[] getZkUrls() {
+        String zkUrlsStr = zkClient.getZookeeperClient().getCurrentConnectionString();
+        return StringUtils.split(zkUrlsStr, ZK_URLS_SEPARATOR);
+    }
+
+    /**
+     * 获取命名空间
+     *
+     * @return 如果无命名空间，则返回""
+     */
+    public String getNamespace() {
+        return zkClient.getNamespace();
+    }
+
+    /**
      * 获取zkClient
      */
     public CuratorFramework getZkClient() {
@@ -262,7 +281,7 @@ public class ZkTemplate {
         try {
             boolean connected = zkClient.blockUntilConnected(BASE_SLEEP_TIME_MS * MAX_RETRIES, TimeUnit.MILLISECONDS);
             if (!connected) {
-                throw new IllegalStateException(String.format("链接zookeeper[%s]失败", zkClient.getZookeeperClient().getCurrentConnectionString()));
+                throw new IllegalStateException(String.format("链接zookeeper[%s]失败", StringUtils.join(getZkUrls(), ZK_URLS_SEPARATOR)));
             }
         } catch (InterruptedException e) {
             ExceptionUtils.rethrow(e);

@@ -18,7 +18,7 @@ import java.nio.charset.Charset;
 import java.util.List;
 
 /**
- *
+ * ZkTemplate单元测试
  */
 @Ignore
 public class ZkTemplateTest {
@@ -77,5 +77,15 @@ public class ZkTemplateTest {
     @Test
     public void testFindChildren() {
         List<String> matchedChildren = zkTemplate.findChildren("/dev", "^[a-z]*[1-9]$");
+    }
+
+    @Test
+    public void testGetZkUrls() {
+        String[] zkUrls = zkTemplate.getZkUrls();
+    }
+
+    @Test
+    public void testGetNamespace() {
+        String namespace = zkTemplate.getNamespace();
     }
 }
