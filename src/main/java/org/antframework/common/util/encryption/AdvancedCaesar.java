@@ -11,7 +11,7 @@ package org.antframework.common.util.encryption;
 import java.util.*;
 
 /**
- * 改进后的凯撒加密（线程安全）
+ * 改进的凯撒加密（线程安全）
  * <p>
  * 加密规则：明文转换文密文时，会根据明文的值进行动态漂移
  */
@@ -80,9 +80,9 @@ public class AdvancedCaesar {
     private void encodeInner(StringBuilder builder) {
         int sum = 0;
         for (int i = 0; i < builder.length(); i++) {
-            int index = originalIndexMap.get(builder.charAt(i));
-            if (index < 0) {
-                throw new IllegalArgumentException(String.format("存在非法加密字符[%c]", builder.charAt(i)));
+            Integer index = originalIndexMap.get(builder.charAt(i));
+            if (index == null) {
+                throw new IllegalArgumentException(String.format("存在非法加密字符'%c'", builder.charAt(i)));
             }
             int temp = index;
             index += sum;
@@ -110,9 +110,9 @@ public class AdvancedCaesar {
     private void decodeInner(StringBuilder builder) {
         int sum = 0;
         for (int i = 0; i < builder.length(); i++) {
-            int index = shuffledIndexMap.get(builder.charAt(i));
-            if (index < 0) {
-                throw new IllegalArgumentException(String.format("存在非法解密字符[%c]", builder.charAt(i)));
+            Integer index = shuffledIndexMap.get(builder.charAt(i));
+            if (index == null) {
+                throw new IllegalArgumentException(String.format("存在非法解密字符'%c'", builder.charAt(i)));
             }
             index -= sum;
             index %= originalChars.length;
