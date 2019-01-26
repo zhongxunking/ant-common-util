@@ -22,12 +22,9 @@ import java.util.Collection;
  */
 public final class FacadeUtils {
     // 分页查询result的info类型缓存
-    private static final Cache<Class, Class> INFO_CLASS_CACHE = new Cache<>(new Cache.Supplier<Class, Class>() {
-        @Override
-        public Class get(Class key) {
-            ResolvableType resolvableType = ResolvableType.forClass(AbstractQueryResult.class, key);
-            return resolvableType.getGeneric(0).resolve(Object.class);
-        }
+    private static final Cache<Class, Class> INFO_CLASS_CACHE = new Cache<>(key -> {
+        ResolvableType resolvableType = ResolvableType.forClass(AbstractQueryResult.class, key);
+        return resolvableType.getGeneric(0).resolve(Object.class);
     });
 
     /**

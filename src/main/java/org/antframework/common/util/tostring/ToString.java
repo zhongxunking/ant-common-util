@@ -228,12 +228,7 @@ public final class ToString {
     // 反射解析对象内部属性的附加器（会转换成User{name="XXX",age=20}这种格式）
     private static class InnerAppender implements Appender {
         // 执行器缓存（每种类型只会在第一次执行时才会进行解析）
-        private static final Cache<Class, InnerAppenderExecutor> EXECUTOR_CACHE = new Cache<>(new Cache.Supplier<Class, InnerAppenderExecutor>() {
-            @Override
-            public InnerAppenderExecutor get(Class key) {
-                return parse(key);
-            }
-        });
+        private static final Cache<Class, InnerAppenderExecutor> EXECUTOR_CACHE = new Cache<>(InnerAppender::parse);
 
         @Override
         public boolean canAppend(Object obj) {

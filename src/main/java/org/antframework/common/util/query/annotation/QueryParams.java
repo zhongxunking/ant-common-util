@@ -22,12 +22,7 @@ import java.util.List;
  */
 public final class QueryParams {
     // 执行器缓存（每种类型只会在第一次执行时才会进行解析）
-    private static final Cache<Class, ParseExecutor> EXECUTOR_CACHE = new Cache<>(new Cache.Supplier<Class, ParseExecutor>() {
-        @Override
-        public ParseExecutor get(Class key) {
-            return parseToExecutor(key);
-        }
-    });
+    private static final Cache<Class, ParseExecutor> EXECUTOR_CACHE = new Cache<>(QueryParams::parseToExecutor);
 
     /**
      * 解析出查询参数

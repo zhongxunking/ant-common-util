@@ -140,12 +140,7 @@ public final class AnnotationLocator {
     // 反射解析对象内部属性的附加器
     private static class InnerAppender<A extends Annotation> implements Appender<A> {
         // 执行器缓存
-        private final Cache<Class, InnerAppenderExecutor<A>> cache = new Cache<>(new Cache.Supplier<Class, InnerAppenderExecutor<A>>() {
-            @Override
-            public InnerAppenderExecutor<A> get(Class key) {
-                return new InnerAppenderExecutor<>(key);
-            }
-        });
+        private final Cache<Class, InnerAppenderExecutor<A>> cache = new Cache<>(InnerAppenderExecutor::new);
 
         @Override
         public boolean canAppend(Object obj) {
@@ -160,12 +155,7 @@ public final class AnnotationLocator {
         // 执行器
         private static class InnerAppenderExecutor<A extends Annotation> {
             // 注解与对应的字段缓存
-            private final Cache<Class<A>, Map<Field, A>> cache = new Cache<>(new Cache.Supplier<Class<A>, Map<Field, A>>() {
-                @Override
-                public Map<Field, A> get(Class<A> key) {
-                    return parse(key);
-                }
-            });
+            private final Cache<Class<A>, Map<Field, A>> cache = new Cache<>(this::parse);
             // 被反射解析的类型
             private final Class targetClass;
 
