@@ -10,12 +10,14 @@ package org.antframework.common.util.annotation.locate;
 
 import org.antframework.common.util.other.Cache;
 import org.springframework.core.annotation.AnnotatedElementUtils;
+import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * 注解位置定位器
@@ -37,23 +39,23 @@ public final class AnnotationLocator {
     /**
      * 定位obj对象内的注解（包含被注解标注字段的引用对象）
      *
-     * @param obj        对象
-     * @param aType      被定位的注解类型
-     * @param fieldTypes 可接受的字段类型
-     * @param <A>        被定位的注解
+     * @param obj            对象
+     * @param aType          被定位的注解类型
+     * @param fieldPredicate 字段断言器（判断是否接受指定字段）
+     * @param <A>            被定位的注解
      * @return 位置
      */
-    public static <A extends Annotation> List<Position<A>> locate(Object obj, Class<A> aType, Class... fieldTypes) {
+    public static <A extends Annotation> List<Position<A>> locate(Object obj, Class<A> aType, Predicate<Field> fieldPredicate) {
         if (APPENDING_OBJS_HOLDER.get() == null) {
             APPENDING_OBJS_HOLDER.set(new HashSet<>());
         }
         List<Position<A>> positions = new LinkedList<>();
-        append(positions, obj, aType, new FieldTypes(fieldTypes));
+        append(positions, obj, aType, fieldPredicate);
         return new ArrayList<>(positions);
     }
 
     // 将obj内的地址附加到positions
-    private static <A extends Annotation> void append(List<Position<A>> positions, Object obj, Class<A> aType, FieldTypes fieldTypes) {
+    private static <A extends Annotation> void append(List<Position<A>> positions, Object obj, Class<A> aType, Predicate<Field> fieldPredicate) {
         if (obj == null) {
             return;
         }
@@ -65,7 +67,7 @@ public final class AnnotationLocator {
         APPENDING_OBJS_HOLDER.get().add(obj);
         try {
             Appender<A> appender = chooseAppender(obj);
-            appender.append(positions, obj, aType, fieldTypes);
+            appender.append(positions, obj, aType, fieldPredicate);
         } finally {
             APPENDING_OBJS_HOLDER.get().remove(obj);
         }
@@ -81,36 +83,13 @@ public final class AnnotationLocator {
         throw new IllegalStateException(String.format("未找到对象[%s]对应的appender", obj));
     }
 
-    // 字段类型
-    private static class FieldTypes {
-        // 类型（null表示包含所有类型）
-        private final Class[] types;
-
-        public FieldTypes(Class[] types) {
-            this.types = types;
-        }
-
-        // 是否包含指定字段类型
-        public boolean contain(Field field) {
-            if (types == null) {
-                return true;
-            }
-            for (Class<?> type : types) {
-                if (type.isAssignableFrom(field.getType())) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
     // 附加器
     private interface Appender<A extends Annotation> {
         // 能否根据obj执行附加
         boolean canAppend(Object obj);
 
         // 解析obj包含的位置，并附加到positions
-        void append(List<Position<A>> positions, Object obj, Class<A> aType, FieldTypes fieldTypes);
+        void append(List<Position<A>> positions, Object obj, Class<A> aType, Predicate<Field> fieldPredicate);
     }
 
     // 集合附加器
@@ -121,9 +100,9 @@ public final class AnnotationLocator {
         }
 
         @Override
-        public void append(List<Position<A>> positions, Object collection, Class<A> aType, FieldTypes fieldTypes) {
+        public void append(List<Position<A>> positions, Object collection, Class<A> aType, Predicate<Field> fieldPredicate) {
             for (Object obj : (Collection) collection) {
-                AnnotationLocator.append(positions, obj, aType, fieldTypes);
+                AnnotationLocator.append(positions, obj, aType, fieldPredicate);
             }
         }
     }
@@ -136,9 +115,9 @@ public final class AnnotationLocator {
         }
 
         @Override
-        public void append(List<Position<A>> positions, Object array, Class<A> aType, FieldTypes fieldTypes) {
+        public void append(List<Position<A>> positions, Object array, Class<A> aType, Predicate<Field> fieldPredicate) {
             for (Object obj : (Object[]) array) {
-                AnnotationLocator.append(positions, obj, aType, fieldTypes);
+                AnnotationLocator.append(positions, obj, aType, fieldPredicate);
             }
         }
     }
@@ -151,9 +130,9 @@ public final class AnnotationLocator {
         }
 
         @Override
-        public void append(List<Position<A>> positions, Object map, Class<A> aType, FieldTypes fieldTypes) {
+        public void append(List<Position<A>> positions, Object map, Class<A> aType, Predicate<Field> fieldPredicate) {
             for (Object obj : ((Map) map).values()) {
-                AnnotationLocator.append(positions, obj, aType, fieldTypes);
+                AnnotationLocator.append(positions, obj, aType, fieldPredicate);
             }
         }
     }
@@ -174,8 +153,8 @@ public final class AnnotationLocator {
         }
 
         @Override
-        public void append(List<Position<A>> positions, Object obj, Class<A> aType, FieldTypes fieldTypes) {
-            cache.get(obj.getClass()).execute(positions, obj, aType, fieldTypes);
+        public void append(List<Position<A>> positions, Object obj, Class<A> aType, Predicate<Field> fieldPredicate) {
+            cache.get(obj.getClass()).execute(positions, obj, aType, fieldPredicate);
         }
 
         // 执行器
@@ -190,18 +169,18 @@ public final class AnnotationLocator {
             // 被反射解析的类型
             private final Class targetClass;
 
-            public InnerAppenderExecutor(Class targetClass) {
+            InnerAppenderExecutor(Class targetClass) {
                 this.targetClass = targetClass;
             }
 
             // 执行
-            public void execute(List<Position<A>> positions, Object obj, Class<A> aType, FieldTypes fieldTypes) {
+            void execute(List<Position<A>> positions, Object obj, Class<A> aType, Predicate<Field> fieldPredicate) {
                 for (Map.Entry<Field, A> entry : cache.get(aType).entrySet()) {
-                    if (fieldTypes.contain(entry.getKey())) {
+                    if (fieldPredicate.test(entry.getKey())) {
                         positions.add(new Position<>(obj, entry.getKey(), entry.getValue()));
                     }
                     // 递进解析字段值
-                    AnnotationLocator.append(positions, ReflectionUtils.getField(entry.getKey(), obj), aType, fieldTypes);
+                    AnnotationLocator.append(positions, ReflectionUtils.getField(entry.getKey(), obj), aType, fieldPredicate);
                 }
             }
 
@@ -223,6 +202,37 @@ public final class AnnotationLocator {
                 }
                 return fieldAMap;
             }
+        }
+    }
+
+    /**
+     * 根据字段类型判断的字段断言器
+     */
+    public static class TypeFieldPredicate implements Predicate<Field> {
+        // 可接受的字段类型
+        private final Class[] types;
+
+        /**
+         * 构造字段断言器
+         *
+         * @param types 可接受的字段类型
+         */
+        public TypeFieldPredicate(Class... types) {
+            Assert.notEmpty(types, "可接受的字段类型不能为null，也不能为空");
+            this.types = types;
+        }
+
+        @Override
+        public boolean test(Field field) {
+            if (types == null) {
+                return true;
+            }
+            for (Class<?> type : types) {
+                if (type.isAssignableFrom(field.getType())) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

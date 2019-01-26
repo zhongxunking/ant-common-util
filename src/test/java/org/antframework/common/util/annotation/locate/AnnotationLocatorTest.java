@@ -46,11 +46,11 @@ public class AnnotationLocatorTest {
         product.setAmount(1000);
         product.setGoodsList(goodsList);
 
-        AnnotationLocator.locate(product, Tag.class, String.class);
+        AnnotationLocator.locate(product, Tag.class, new AnnotationLocator.TypeFieldPredicate(String.class));
         long startTime = System.currentTimeMillis();
         int count = 1000000;
         for (int i = 0; i < count; i++) {
-            List<Position<Tag>> positions = AnnotationLocator.locate(product, Tag.class, String.class);
+            List<Position<Tag>> positions = AnnotationLocator.locate(product, Tag.class, new AnnotationLocator.TypeFieldPredicate(String.class));
 //            Assert.assertEquals(6, positions.size());
         }
         long timeCost = System.currentTimeMillis() - startTime;
