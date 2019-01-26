@@ -224,9 +224,6 @@ public final class AnnotationLocator {
 
         @Override
         public boolean test(Field field) {
-            if (types == null) {
-                return true;
-            }
             for (Class<?> type : types) {
                 if (type.isAssignableFrom(field.getType())) {
                     return true;
