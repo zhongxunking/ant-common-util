@@ -187,19 +187,16 @@ public final class AnnotationLocator {
             // 将被注解标注的字段解析出来
             private Map<Field, A> parse(Class<A> aType) {
                 Map<Field, A> fieldAMap = new HashMap<>();
-                for (Class parsingClass = targetClass; parsingClass != null; parsingClass = parsingClass.getSuperclass()) {
-                    for (Field field : parsingClass.getDeclaredFields()) {
-                        if (Modifier.isStatic(field.getModifiers())) {
-                            continue;
-                        }
-                        A annotation = AnnotatedElementUtils.findMergedAnnotation(field, aType);
-                        if (annotation == null) {
-                            continue;
-                        }
-                        ReflectionUtils.makeAccessible(field);
-                        fieldAMap.put(field, annotation);
+                // 解析每个字段
+                ReflectionUtils.doWithFields(targetClass, field -> {
+                    A annotation = AnnotatedElementUtils.findMergedAnnotation(field, aType);
+                    if (annotation == null) {
+                        return;
                     }
-                }
+                    ReflectionUtils.makeAccessible(field);
+                    fieldAMap.put(field, annotation);
+                }, field -> !Modifier.isStatic(field.getModifiers()));
+
                 return fieldAMap;
             }
         }
