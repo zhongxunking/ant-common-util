@@ -6,8 +6,10 @@
  * 修订记录:
  * @author 钟勋 2018-01-18 01:17 创建
  */
-package org.antframework.common.util.id;
+package org.antframework.common.util.id.local;
 
+import org.antframework.common.util.id.Id;
+import org.antframework.common.util.id.PeriodType;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;

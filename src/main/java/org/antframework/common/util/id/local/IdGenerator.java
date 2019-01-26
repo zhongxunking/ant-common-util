@@ -6,9 +6,12 @@
  * 修订记录:
  * @author 钟勋 2018-01-16 08:39 创建
  */
-package org.antframework.common.util.id;
+package org.antframework.common.util.id.local;
 
 import org.antframework.common.util.file.MapFile;
+import org.antframework.common.util.id.Id;
+import org.antframework.common.util.id.Period;
+import org.antframework.common.util.id.PeriodType;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -33,7 +36,7 @@ public class IdGenerator {
     private Ids ids;
 
     /**
-     * 创建id生成器
+     * 构造id生成器
      *
      * @param periodType    周期类型
      * @param batchAmount   每次批量生成的id数量
@@ -97,7 +100,7 @@ public class IdGenerator {
         // 缓存文件
         private MapFile cacheFile;
 
-        public IdAnchor(Period period, long id, MapFile cacheFile) {
+        IdAnchor(Period period, long id, MapFile cacheFile) {
             this.period = period;
             this.id = id;
             this.cacheFile = cacheFile;
@@ -108,7 +111,7 @@ public class IdGenerator {
          *
          * @return 批量id
          */
-        public Ids next() {
+        Ids next() {
             // 现代化
             modernize();
             // 创建批量id
@@ -162,7 +165,7 @@ public class IdGenerator {
         // id个数
         private int amount;
 
-        public Ids(Period period, long startId, int amount) {
+        Ids(Period period, long startId, int amount) {
             this.period = period;
             this.startId = startId;
             this.amount = amount;
@@ -171,7 +174,7 @@ public class IdGenerator {
         /**
          * 获取id（如果无可用id，则返回null）
          */
-        public Id getId() {
+        Id getId() {
             if (getAmount() <= 0) {
                 return null;
             }
