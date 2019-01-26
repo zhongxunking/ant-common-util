@@ -29,5 +29,4 @@ public interface FieldFormatter {
      * @return 属性格式化后的字符串（一般是name="abc"这种格式），返回null表示此属性被隐藏
      */
     String format(Object obj);
-
 }

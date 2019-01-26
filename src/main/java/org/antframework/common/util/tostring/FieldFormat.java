@@ -22,5 +22,4 @@ public @interface FieldFormat {
      * 指定格式化器
      */
     Class<? extends FieldFormatter> formattedBy();
-
 }

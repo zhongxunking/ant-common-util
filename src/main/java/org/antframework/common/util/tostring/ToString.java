@@ -28,7 +28,7 @@ public final class ToString {
     // null字符串
     private static final String NULL_STRING = "null";
     // 正在被解析对象的持有器（用于检查循环引用）
-    private static final ThreadLocal<Set> APPENDING_OBJS_HOLDER = new ThreadLocal<>();
+    private static final ThreadLocal<Set<Object>> APPENDING_OBJS_HOLDER = new ThreadLocal<>();
     // 内部附加器（通过反射解析对象内部字段）
     private static final Appender INNER_APPENDER = new InnerAppender();
     // 优先附加器（优先使用本list中的附加器解析对象）
@@ -53,7 +53,7 @@ public final class ToString {
      */
     public static String toString(Object obj) {
         if (APPENDING_OBJS_HOLDER.get() == null) {
-            APPENDING_OBJS_HOLDER.set(new HashSet());
+            APPENDING_OBJS_HOLDER.set(new HashSet<>());
         }
 
         StringBuilder builder = new StringBuilder();
