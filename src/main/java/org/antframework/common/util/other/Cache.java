@@ -11,6 +11,7 @@ package org.antframework.common.util.other;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 /**
  * 缓存（线程安全）
@@ -24,14 +25,14 @@ public class Cache<K, V> {
     // 存放缓存的map
     private final Map<K, V> map = new ConcurrentHashMap<>();
     // 缓存提供者
-    private final Supplier<K, ? extends V> supplier;
+    private final Function<K, ? extends V> supplier;
 
     /**
      * 创建新的缓存
      *
      * @param supplier 缓存value提供者
      */
-    public Cache(Supplier<K, ? extends V> supplier) {
+    public Cache(Function<K, ? extends V> supplier) {
         this.supplier = supplier;
     }
 
@@ -44,13 +45,7 @@ public class Cache<K, V> {
     public V get(K key) {
         V value = map.get(key);
         if (value == null) {
-            synchronized (map) {
-                value = map.get(key);
-                if (value == null) {
-                    value = toSavable(supplier.get(key));
-                    map.put(key, value);
-                }
-            }
+            value = map.computeIfAbsent(key, cacheKey -> toSavable(supplier.apply(cacheKey)));
         }
         return toOriginal(value);
     }
@@ -89,22 +84,5 @@ public class Cache<K, V> {
     // 转换为原始vale
     private static <V> V toOriginal(V savable) {
         return savable != NULL_VALUE ? savable : null;
-    }
-
-    /**
-     * 缓存提供者
-     *
-     * @param <K> 缓存key类型
-     * @param <V> 缓存value类型
-     */
-    public interface Supplier<K, V> {
-
-        /**
-         * 获取缓存value
-         *
-         * @param key 缓存key
-         * @return null 如果该缓存为null
-         */
-        V get(K key);
     }
 }

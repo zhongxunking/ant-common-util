@@ -15,15 +15,12 @@ import org.junit.Test;
  * 缓存单元测试
  */
 public class CacheTest {
-    private Cache<String, Integer> cache = new Cache<>(new Cache.Supplier<String, Integer>() {
-        @Override
-        public Integer get(String key) {
-            Integer value = Integer.parseInt(key);
-            if (value > 100) {
-                return null;
-            }
-            return value;
+    private Cache<String, Integer> cache = new Cache<>(key -> {
+        Integer value = Integer.parseInt(key);
+        if (value > 100) {
+            return null;
         }
+        return value;
     });
 
     @Test
