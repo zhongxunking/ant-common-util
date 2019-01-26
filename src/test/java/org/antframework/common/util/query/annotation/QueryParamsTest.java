@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * QueryParamsParser单元测试
  */
-public class QueryParamsParserTest {
+public class QueryParamsTest {
 
     @Test
     public void testParse() {
