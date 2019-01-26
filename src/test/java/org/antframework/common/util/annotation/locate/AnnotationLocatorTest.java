@@ -8,6 +8,7 @@
  */
 package org.antframework.common.util.annotation.locate;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.lang.annotation.Documented;
@@ -51,7 +52,7 @@ public class AnnotationLocatorTest {
         int count = 1000000;
         for (int i = 0; i < count; i++) {
             List<Position<Tag>> positions = AnnotationLocator.locate(product, Tag.class, new AnnotationLocator.TypeFieldPredicate(String.class));
-//            Assert.assertEquals(6, positions.size());
+            Assert.assertEquals(6, positions.size());
         }
         long timeCost = System.currentTimeMillis() - startTime;
         System.out.println("AnnotationLocator性能：");
@@ -67,6 +68,8 @@ public class AnnotationLocatorTest {
 
     private static class Product {
         private String productId;
+        @Tag
+        public static String myStaticName;
         @Tag
         private String name;
         @Tag
