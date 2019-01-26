@@ -14,7 +14,6 @@ import org.springframework.cglib.core.ReflectUtils;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.util.ReflectionUtils;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,20 +42,20 @@ public final class QueryParams {
     // 解析出执行器
     private static ParseExecutor parseToExecutor(Class clazz) {
         List<QueryParamParser> parsers = new ArrayList<>();
-        for (Class parsingClass = clazz; parsingClass != null; parsingClass = parsingClass.getSuperclass()) {
-            for (Field field : parsingClass.getDeclaredFields()) {
-                // 判断属性是否是查询参数
-                org.antframework.common.util.query.annotation.QueryParam queryParamAnnotation = AnnotatedElementUtils.findMergedAnnotation(field, org.antframework.common.util.query.annotation.QueryParam.class);
-                if (queryParamAnnotation == null) {
-                    continue;
-                }
-                ReflectionUtils.makeAccessible(field);
-                // 创建属性解析器
-                QueryParamParser parser = (QueryParamParser) ReflectUtils.newInstance(queryParamAnnotation.parser());
-                parser.init(field);
-                parsers.add(parser);
+        // 解析每个字段是否是查询参数
+        ReflectionUtils.doWithFields(clazz, field -> {
+            // 判断属性是否是查询参数
+            org.antframework.common.util.query.annotation.QueryParam queryParamAnnotation = AnnotatedElementUtils.findMergedAnnotation(field, org.antframework.common.util.query.annotation.QueryParam.class);
+            if (queryParamAnnotation == null) {
+                return;
             }
-        }
+            ReflectionUtils.makeAccessible(field);
+            // 创建属性解析器
+            QueryParamParser parser = (QueryParamParser) ReflectUtils.newInstance(queryParamAnnotation.parser());
+            parser.init(field);
+            parsers.add(parser);
+        });
+
         return new ParseExecutor(parsers);
     }
 
