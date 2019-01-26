@@ -8,25 +8,71 @@
  */
 package org.antframework.common.util.id;
 
+import org.antframework.common.util.tostring.ToString;
+
+import java.io.Serializable;
+import java.util.Objects;
+
 /**
  * id
  */
-public class Id {
+public final class Id implements Comparable<Id>, Serializable {
     // 周期
-    private Period period;
+    private final Period period;
     // id
-    private long id;
+    private final long id;
 
+    /**
+     * 构造id
+     *
+     * @param period 周期
+     * @param id     id
+     */
     public Id(Period period, long id) {
+        Objects.requireNonNull(period, "id的周期不能为null");
         this.period = period;
         this.id = id;
     }
 
+    /**
+     * 获取周期
+     */
     public Period getPeriod() {
         return period;
     }
 
+    /**
+     * 获取id
+     */
     public long getId() {
         return id;
+    }
+
+    @Override
+    public int compareTo(Id o) {
+        int result = period.compareTo(o.period);
+        if (result == 0) {
+            result = Long.compare(id, o.id);
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(period, id);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Id)) {
+            return false;
+        }
+        Id other = (Id) obj;
+        return period.equals(other.period) && id == other.id;
+    }
+
+    @Override
+    public String toString() {
+        return ToString.toString(this);
     }
 }

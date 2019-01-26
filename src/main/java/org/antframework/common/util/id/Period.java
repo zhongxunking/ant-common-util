@@ -19,22 +19,20 @@ import java.util.Objects;
 /**
  * 周期
  */
-public class Period implements Comparable<Period>, Serializable {
+public final class Period implements Comparable<Period>, Serializable {
     // 周期类型
     private final PeriodType type;
     // 周期时间
     private final Date date;
 
     /**
-     * 创建周期
+     * 构造周期
      *
      * @param type 周期类型
      * @param date 周期时间
      */
     public Period(PeriodType type, Date date) {
-        if (type == null) {
-            throw new NullPointerException("周期类型不能为null");
-        }
+        Objects.requireNonNull(type, "周期类型不能为null");
         this.type = type;
         this.date = parseDate(type, date);
     }
@@ -108,7 +106,8 @@ public class Period implements Comparable<Period>, Serializable {
         if (!(obj instanceof Period)) {
             return false;
         }
-        return compareTo((Period) obj) == 0;
+        Period other = (Period) obj;
+        return type == other.getType() && compareTo(other) == 0;
     }
 
     @Override
@@ -133,6 +132,8 @@ public class Period implements Comparable<Period>, Serializable {
     private static Date parseDate(PeriodType type, Date date) {
         if (type == PeriodType.NONE) {
             return null;
+        } else {
+            Objects.requireNonNull(date, String.format("周期类型为%s，则周期时间不能为null", type));
         }
 
         Calendar calendar = Calendar.getInstance();
