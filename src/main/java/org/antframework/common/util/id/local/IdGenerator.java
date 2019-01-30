@@ -59,7 +59,7 @@ public class IdGenerator {
     /**
      * 获取id
      */
-    public synchronized Id getId() {
+    public synchronized Id acquire() {
         Id id = ids.getId();
         while (id == null) {
             ids = idAnchor.next();

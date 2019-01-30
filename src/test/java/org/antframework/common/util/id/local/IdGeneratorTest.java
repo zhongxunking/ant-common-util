@@ -32,7 +32,7 @@ public class IdGeneratorTest {
 
     @Test
     public void testGetId() {
-        Id id = idGenerator.getId();
+        Id id = idGenerator.acquire();
     }
 
     @Test
@@ -42,7 +42,7 @@ public class IdGeneratorTest {
         int count = 10000000;
         int nullId = 0;
         for (int i = 0; i < count; i++) {
-            Id id = idGenerator.getId();
+            Id id = idGenerator.acquire();
             if (id == null) {
                 nullId++;
             }
