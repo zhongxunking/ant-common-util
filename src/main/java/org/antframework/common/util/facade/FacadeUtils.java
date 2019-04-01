@@ -10,6 +10,7 @@ package org.antframework.common.util.facade;
 
 import org.antframework.common.util.other.Cache;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cglib.core.ReflectUtils;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
@@ -26,6 +27,30 @@ public final class FacadeUtils {
         ResolvableType resolvableType = ResolvableType.forClass(AbstractQueryResult.class, key);
         return resolvableType.getGeneric(0).resolve(Object.class);
     });
+
+    /**
+     * 构建成功result
+     *
+     * @param resultType result类型的Class
+     * @param <T>        result类型
+     * @return 成功result
+     */
+    public static <T extends AbstractResult> T buildSuccess(Class<T> resultType) {
+        T result = (T) ReflectUtils.newInstance(resultType);
+        initSuccess(result);
+        return result;
+    }
+
+    /**
+     * 初始化result为成功
+     *
+     * @param result 被初始化的result
+     */
+    public static void initSuccess(AbstractResult result) {
+        result.setStatus(Status.SUCCESS);
+        result.setCode(CommonResultCode.SUCCESS.getCode());
+        result.setMessage(CommonResultCode.SUCCESS.getMessage());
+    }
 
     /**
      * 断言result为成功
