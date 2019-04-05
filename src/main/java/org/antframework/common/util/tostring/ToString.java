@@ -8,6 +8,7 @@
  */
 package org.antframework.common.util.tostring;
 
+import lombok.AllArgsConstructor;
 import org.antframework.common.util.other.Cache;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.cglib.core.ReflectUtils;
@@ -116,7 +117,6 @@ public final class ToString {
 
     // 附加器
     private interface Appender {
-
         // 能否根据obj执行附加
         boolean canAppend(Object obj);
 
@@ -269,22 +269,17 @@ public final class ToString {
         }
 
         // 执行器
+        @AllArgsConstructor
         private static class InnerAppenderExecutor {
             // 类名（简写）
-            private String className;
+            private final String className;
             // 字段
-            private List<Field> fields;
+            private final List<Field> fields;
             // 字段格式化器Map
-            private Map<Field, FieldFormatter> formatterMap;
-
-            public InnerAppenderExecutor(String className, List<Field> fields, Map<Field, FieldFormatter> formatterMap) {
-                this.className = className;
-                this.fields = fields;
-                this.formatterMap = formatterMap;
-            }
+            private final Map<Field, FieldFormatter> formatterMap;
 
             // 执行
-            public void execute(StringBuilder builder, Object obj) {
+            void execute(StringBuilder builder, Object obj) {
                 builder.append(className).append('{');
 
                 for (Field field : fields) {

@@ -8,6 +8,8 @@
  */
 package org.antframework.common.util.other;
 
+import lombok.AllArgsConstructor;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,22 +21,15 @@ import java.util.function.Function;
  * @param <K> 缓存key类型
  * @param <V> 缓存value类型
  */
+@AllArgsConstructor
 public class Cache<K, V> {
     // null占位符
     private static final Object NULL_VALUE = new Object();
+
     // 存放缓存的map
     private final Map<K, V> map = new ConcurrentHashMap<>();
     // 缓存提供者
     private final Function<K, ? extends V> supplier;
-
-    /**
-     * 创建新的缓存
-     *
-     * @param supplier 缓存value提供者
-     */
-    public Cache(Function<K, ? extends V> supplier) {
-        this.supplier = supplier;
-    }
 
     /**
      * 获取缓存（如果该缓存不存在，则调用缓存提供者获取缓存）

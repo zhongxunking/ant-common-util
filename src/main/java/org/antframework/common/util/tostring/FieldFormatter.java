@@ -14,7 +14,6 @@ import java.lang.reflect.Field;
  * 属性格式化器（实现类必须提供默认构造函数）
  */
 public interface FieldFormatter {
-
     /**
      * 初始化（一个格式化器实例只被执行一次）
      *

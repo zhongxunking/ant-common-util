@@ -21,7 +21,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @FieldFormat(formattedBy = MaskFieldFormatter.class)
 public @interface Mask {
-
     /**
      * 是否全部掩码
      * （true：得到固定{@link MaskFieldFormatter#ALL_MASK_STR_SIZE}位长度的掩码字符串；false：依据下面其他属性进行掩码）
@@ -44,5 +43,4 @@ public @interface Mask {
      * 掩码字符（默认'*'）
      */
     char maskChar() default '*';
-
 }

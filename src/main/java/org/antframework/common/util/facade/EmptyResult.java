@@ -9,7 +9,7 @@
 package org.antframework.common.util.facade;
 
 /**
- * 空result（对于一些写操作只需要返回是否成功，而不需要返回其他信息，则可以使用本类型）
+ * 空result
  */
 public class EmptyResult extends AbstractResult {
 }

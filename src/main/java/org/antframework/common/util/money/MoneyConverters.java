@@ -17,7 +17,6 @@ import java.util.List;
  * money转换器聚合类
  */
 public class MoneyConverters {
-
     /**
      * 获取Money的所有转换器
      */

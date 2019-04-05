@@ -8,6 +8,7 @@
  */
 package org.antframework.common.util.id;
 
+import lombok.Getter;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 
@@ -19,6 +20,7 @@ import java.util.Objects;
 /**
  * 周期
  */
+@Getter
 public final class Period implements Comparable<Period>, Serializable {
     // 周期类型
     private final PeriodType type;
@@ -35,20 +37,6 @@ public final class Period implements Comparable<Period>, Serializable {
         Objects.requireNonNull(type, "周期类型不能为null");
         this.type = type;
         this.date = parseDate(type, date);
-    }
-
-    /**
-     * 获取周期类型
-     */
-    public PeriodType getType() {
-        return type;
-    }
-
-    /**
-     * 获取周期时间
-     */
-    public Date getDate() {
-        return date;
     }
 
     /**

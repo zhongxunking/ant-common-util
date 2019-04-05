@@ -8,9 +8,14 @@
  */
 package org.antframework.common.util.facade;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * 常用结果码
  */
+@AllArgsConstructor
+@Getter
 public enum CommonResultCode {
 
     SUCCESS("common-0000", "成功"),
@@ -24,26 +29,7 @@ public enum CommonResultCode {
     UNAUTHORIZED("common-0004", "未授权"),;
 
     // 结果码
-    private String code;
+    private final String code;
     // 描述
-    private String message;
-
-    CommonResultCode(String code, String message) {
-        this.code = code;
-        this.message = message;
-    }
-
-    /**
-     * 获取结果码
-     */
-    public String getCode() {
-        return code;
-    }
-
-    /**
-     * 获取描述
-     */
-    public String getMessage() {
-        return message;
-    }
+    private final String message;
 }

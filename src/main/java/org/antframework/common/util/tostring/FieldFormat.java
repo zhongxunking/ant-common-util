@@ -17,7 +17,6 @@ import java.lang.annotation.*;
 @Target({ElementType.ANNOTATION_TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FieldFormat {
-
     /**
      * 指定格式化器
      */

@@ -8,6 +8,7 @@
  */
 package org.antframework.common.util.query;
 
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 
@@ -18,6 +19,7 @@ import java.util.Map;
 /**
  * 查询参数
  */
+@Getter
 public class QueryParam {
     /**
      * 操作符与属性名之间的分隔符
@@ -37,18 +39,6 @@ public class QueryParam {
         this.attrName = attrName;
         this.operator = operator;
         this.value = value;
-    }
-
-    public String getAttrName() {
-        return attrName;
-    }
-
-    public QueryOperator getOperator() {
-        return operator;
-    }
-
-    public Object getValue() {
-        return value;
     }
 
     /**

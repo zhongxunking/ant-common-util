@@ -8,6 +8,8 @@
  */
 package org.antframework.common.util.facade;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.antframework.common.util.tostring.ToString;
 
 import java.io.Serializable;
@@ -15,6 +17,8 @@ import java.io.Serializable;
 /**
  * 抽象result（所有result的父类）
  */
+@Getter
+@Setter
 public abstract class AbstractResult implements Serializable {
     // 状态
     private Status status;
@@ -25,30 +29,6 @@ public abstract class AbstractResult implements Serializable {
 
     public boolean isSuccess() {
         return status == Status.SUCCESS;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     @Override

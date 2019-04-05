@@ -8,6 +8,7 @@
  */
 package org.antframework.common.util.query.annotation;
 
+import lombok.AllArgsConstructor;
 import org.antframework.common.util.other.Cache;
 import org.antframework.common.util.query.QueryParam;
 import org.springframework.cglib.core.ReflectUtils;
@@ -55,16 +56,13 @@ public final class QueryParams {
     }
 
     // 解析执行器
+    @AllArgsConstructor
     private static class ParseExecutor {
         // 解析器
-        private List<QueryParamParser> parsers;
-
-        public ParseExecutor(List<QueryParamParser> parsers) {
-            this.parsers = parsers;
-        }
+        private final List<QueryParamParser> parsers;
 
         // 执行
-        public List<QueryParam> execute(Object obj) {
+        List<QueryParam> execute(Object obj) {
             List<QueryParam> queryParams = new ArrayList<>();
             for (QueryParamParser fieldParser : parsers) {
                 QueryParam queryParam = fieldParser.parse(obj);

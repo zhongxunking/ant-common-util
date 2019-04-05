@@ -8,6 +8,8 @@
  */
 package org.antframework.common.util.annotation.locate;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.annotation.Annotation;
@@ -16,6 +18,8 @@ import java.lang.reflect.Field;
 /**
  * 位置
  */
+@AllArgsConstructor
+@Getter
 public class Position<A extends Annotation> {
     // 被注解标记的对象
     private final Object target;
@@ -23,40 +27,6 @@ public class Position<A extends Annotation> {
     private final Field field;
     // 注解
     private final A annotation;
-
-    /**
-     * 创建位置
-     *
-     * @param target     被注解标记的对象
-     * @param field      被注解标记的字段
-     * @param annotation 注解
-     */
-    public Position(Object target, Field field, A annotation) {
-        this.target = target;
-        this.field = field;
-        this.annotation = annotation;
-    }
-
-    /**
-     * 获取被注解标记的对象
-     */
-    public Object getTarget() {
-        return target;
-    }
-
-    /**
-     * 获取被注解标记的字段
-     */
-    public Field getField() {
-        return field;
-    }
-
-    /**
-     * 获取注解
-     */
-    public A getAnnotation() {
-        return annotation;
-    }
 
     /**
      * 获取被注解标记字段的值

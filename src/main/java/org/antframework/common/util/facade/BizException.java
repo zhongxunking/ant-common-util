@@ -8,9 +8,12 @@
  */
 package org.antframework.common.util.facade;
 
+import lombok.Getter;
+
 /**
  * 业务异常
  */
+@Getter
 public class BizException extends RuntimeException {
     // 结果状态
     private final Status status;
@@ -40,19 +43,5 @@ public class BizException extends RuntimeException {
         super(message, cause);
         this.status = status;
         this.code = code;
-    }
-
-    /**
-     * 获取结果状态
-     */
-    public Status getStatus() {
-        return status;
-    }
-
-    /**
-     * 获取结果码
-     */
-    public String getCode() {
-        return code;
     }
 }

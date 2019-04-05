@@ -8,12 +8,17 @@
  */
 package org.antframework.common.util.money;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  * 钱
  */
+@AllArgsConstructor
+@Getter
 public final class Money implements Comparable<Money>, Serializable {
     // 元到分的比例
     private static final BigDecimal SCALE = new BigDecimal(100);
@@ -36,17 +41,6 @@ public final class Money implements Comparable<Money>, Serializable {
 
     // 分
     private final long cent;
-
-    public Money(long cent) {
-        this.cent = cent;
-    }
-
-    /**
-     * 获取分
-     */
-    public long getCent() {
-        return cent;
-    }
 
     /**
      * 加法（结果存到新对象，本对象不变）
@@ -90,13 +84,7 @@ public final class Money implements Comparable<Money>, Serializable {
 
     @Override
     public int compareTo(Money other) {
-        if (cent < other.getCent()) {
-            return -1;
-        } else if (cent == other.getCent()) {
-            return 0;
-        } else {
-            return 1;
-        }
+        return Long.compare(cent, other.cent);
     }
 
     @Override
@@ -106,11 +94,7 @@ public final class Money implements Comparable<Money>, Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Money) {
-            return compareTo((Money) obj) == 0;
-        } else {
-            return false;
-        }
+        return obj instanceof Money && compareTo((Money) obj) == 0;
     }
 
     /**

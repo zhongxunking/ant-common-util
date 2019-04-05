@@ -8,6 +8,7 @@
  */
 package org.antframework.common.util.facade;
 
+import lombok.AllArgsConstructor;
 import org.antframework.common.util.other.Cache;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cglib.core.ReflectUtils;
@@ -123,13 +124,10 @@ public final class FacadeUtils {
      *
      * @param <S> 需转换为info的类型
      */
+    @AllArgsConstructor
     public static class SpringDataPageExtractor<S> implements PageExtractor<S> {
         // spring-data-commons page
-        private Page<S> page;
-
-        public SpringDataPageExtractor(Page<S> page) {
-            this.page = page;
-        }
+        private final Page<S> page;
 
         @Override
         public long getTotalCount() {
@@ -148,13 +146,10 @@ public final class FacadeUtils {
      * @param <S> 源类型
      * @param <T> 目标类型
      */
+    @AllArgsConstructor
     public static class DefaultConverter<S, T> implements Converter<S, T> {
         // 目标类型Class
-        private Class<T> targetClass;
-
-        public DefaultConverter(Class<T> targetClass) {
-            this.targetClass = targetClass;
-        }
+        private final Class<T> targetClass;
 
         @Override
         public T convert(S source) {

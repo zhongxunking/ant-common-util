@@ -8,21 +8,19 @@
  */
 package org.antframework.common.util.zookeeper;
 
+import lombok.extern.slf4j.Slf4j;
 import org.antframework.common.util.file.MapFile;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.zookeeper.CreateMode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.nio.charset.Charset;
 
 /**
  * workerId
  */
+@Slf4j
 public final class WorkerId {
-    private static final Logger logger = LoggerFactory.getLogger(WorkerId.class);
-
     /**
      * 获取workerId（本方法不适合被频繁调用，因为每次调用都会连接zookeeper并释放）
      *
@@ -39,9 +37,9 @@ public final class WorkerId {
         try {
             id = getIdFromZk(worker, zkUrls, nodePath);
         } catch (Throwable e) {
-            logger.error("从zookeeper上读取workerId出错：{}", e.getMessage());
+            log.error("从zookeeper上读取workerId出错：{}", e.getMessage());
             if (cacheFile != null) {
-                logger.warn("尝试从缓存文件读取workerId");
+                log.warn("尝试从缓存文件读取workerId");
                 id = cacheFile.read(worker);
                 if (id == null) {
                     throw new IllegalStateException(String.format("不存在缓存文件[%s]或缓存文件内无worker[%s]的workerId", cacheFile.getFilePath(), worker));

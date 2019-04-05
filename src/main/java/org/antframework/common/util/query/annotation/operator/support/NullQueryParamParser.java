@@ -14,7 +14,6 @@ import org.antframework.common.util.query.QueryOperator;
  * 等于null查询条件解析器
  */
 public class NullQueryParamParser extends AbstractQueryParamParser {
-
     @Override
     protected boolean isQueryParam(Object rawValue) {
         return true;

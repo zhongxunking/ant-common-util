@@ -9,7 +9,7 @@
 package org.antframework.common.util.facade;
 
 /**
- * 空order（对于一些触发性操作，请求中并不需要带信息，则可以使用本类）
+ * 空order
  */
 public class EmptyOrder extends AbstractOrder {
 }

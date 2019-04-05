@@ -8,6 +8,7 @@
  */
 package org.antframework.common.util.id;
 
+import lombok.Getter;
 import org.antframework.common.util.tostring.ToString;
 
 import java.io.Serializable;
@@ -16,6 +17,7 @@ import java.util.Objects;
 /**
  * id
  */
+@Getter
 public final class Id implements Comparable<Id>, Serializable {
     // 周期
     private final Period period;
@@ -34,25 +36,11 @@ public final class Id implements Comparable<Id>, Serializable {
         this.id = id;
     }
 
-    /**
-     * 获取周期
-     */
-    public Period getPeriod() {
-        return period;
-    }
-
-    /**
-     * 获取id
-     */
-    public long getId() {
-        return id;
-    }
-
     @Override
-    public int compareTo(Id o) {
-        int result = period.compareTo(o.period);
+    public int compareTo(Id other) {
+        int result = period.compareTo(other.period);
         if (result == 0) {
-            result = Long.compare(id, o.id);
+            result = Long.compare(id, other.id);
         }
         return result;
     }
