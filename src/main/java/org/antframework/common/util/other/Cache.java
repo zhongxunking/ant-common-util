@@ -65,6 +65,13 @@ public class Cache<K, V> {
     }
 
     /**
+     * 获取缓存大小
+     */
+    public int size() {
+        return map.size();
+    }
+
+    /**
      * 清除所有缓存
      */
     public void clear() {
