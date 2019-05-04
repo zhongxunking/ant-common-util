@@ -15,7 +15,7 @@
 <dependency>
     <groupId>org.antframework.common</groupId>
     <artifactId>ant-common-util</artifactId>
-    <version>1.2.2.RELEASE</version>
+    <version>1.3.0.RELEASE</version>
 </dependency>
 ```
 ## 2. ToString
