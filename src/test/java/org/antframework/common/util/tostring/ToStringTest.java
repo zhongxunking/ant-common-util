@@ -77,7 +77,7 @@ public class ToStringTest {
         private String name;
         private int age;
         private Date birthDay;
-        @Mask(allMask = true)
+        @Mask
         private String password;
         @Mask(startSize = 4, endSize = 2)
         private String fixMaskSize;
