@@ -77,19 +77,19 @@ public class ToStringTest {
         private String name;
         private int age;
         private Date birthDay;
-        @Mask
+        @Mask(secureMask = true)
         private String password;
         @Mask(startSize = 4, endSize = 2)
         private String fixMaskSize;
-        @Mask
+        @Mask(startSize = 1, endSize = 1)
         private String certNo;
-        @Mask
+        @Mask(startSize = 3, endSize = 4)
         private String mobileNo;
-        @Mask
+        @Mask(startSize = 1, endSize = 5)
         private String email;
-        @Mask
+        @Mask(startSize = 4, endSize = 4)
         private String bankCardNo;
-        @Mask
+        @Mask(startSize = 4, endSize = 4)
         private String organizationCode;
         @Mask
         private String unrecognize;
