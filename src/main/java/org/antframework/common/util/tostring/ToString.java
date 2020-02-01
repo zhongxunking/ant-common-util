@@ -37,7 +37,7 @@ public final class ToString {
 
     static {
         PRIOR_APPENDERS = new ArrayList<>();
-        PRIOR_APPENDERS.add(new StringAppender());
+        PRIOR_APPENDERS.add(new CharSequenceAppender());
         PRIOR_APPENDERS.add(new DateAppender());
         PRIOR_APPENDERS.add(new CollectionAppender());
         PRIOR_APPENDERS.add(new MapAppender());
@@ -124,16 +124,16 @@ public final class ToString {
         void append(StringBuilder builder, Object obj);
     }
 
-    // String类型附加器（会在字符串两边加双引号，比如：abc会转换成"abc"）
-    private static class StringAppender implements Appender {
+    // CharSequence类型附加器（会在字符串两边加双引号，比如：abc会转换成"abc"）
+    private static class CharSequenceAppender implements Appender {
         @Override
         public boolean canAppend(Object obj) {
-            return obj instanceof String;
+            return obj instanceof CharSequence;
         }
 
         @Override
         public void append(StringBuilder builder, Object str) {
-            builder.append('"').append((String) str).append('"');
+            builder.append('"').append((CharSequence) str).append('"');
         }
     }
 
