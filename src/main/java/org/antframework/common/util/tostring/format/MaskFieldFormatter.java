@@ -54,7 +54,7 @@ public class MaskFieldFormatter implements FieldFormatter {
     @Override
     public String format(Object obj) {
         String maskedStr = null;
-        String str = (String) ReflectionUtils.getField(field, obj);
+        CharSequence str = (CharSequence) ReflectionUtils.getField(field, obj);
         if (str != null) {
             if (secureMask) {
                 maskedStr = SECURE_MASK_CACHE.get(maskChar);

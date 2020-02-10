@@ -24,7 +24,7 @@ public final class MaskUtils {
      * @return 掩码后的字符串
      * @throws IllegalArgumentException startSize小于0或endSize小于0
      */
-    public static String mask(String str, int startSize, int endSize) {
+    public static String mask(CharSequence str, int startSize, int endSize) {
         return mask(str, startSize, endSize, DEFAULT_MASK_CHAR);
     }
 
@@ -38,7 +38,7 @@ public final class MaskUtils {
      * @return 掩码后的字符串
      * @throws IllegalArgumentException startSize小于0或endSize小于0
      */
-    public static String mask(String str, int startSize, int endSize, char maskChar) {
+    public static String mask(CharSequence str, int startSize, int endSize, char maskChar) {
         if (startSize < 0 || endSize < 0) {
             throw new IllegalArgumentException("startSize和endSize不能小于0");
         }
