@@ -257,7 +257,7 @@ public final class ToString {
                     if (formatAnnotation != null) {
                         // 初始化formatter
                         FieldFormatter formatter = (FieldFormatter) ReflectUtils.newInstance(formatAnnotation.formattedBy());
-                        formatter.initialize(field);
+                        formatter.init(field);
                         formatterMap.put(field, formatter);
                     }
                 }

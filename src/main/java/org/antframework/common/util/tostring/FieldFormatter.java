@@ -19,7 +19,7 @@ public interface FieldFormatter {
      *
      * @param field 被标注的属性
      */
-    void initialize(Field field);
+    void init(Field field);
 
     /**
      * 格式化（此方法会被并发调用，实现类需保证线程安全）

@@ -28,7 +28,7 @@ public class HideDetailFieldFormatter implements FieldFormatter {
     private ValueFormatter valueFormatter;
 
     @Override
-    public void initialize(Field field) {
+    public void init(Field field) {
         this.field = field;
         formattedPre = field.getName() + "=";
         Class fieldType = field.getType();

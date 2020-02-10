@@ -17,7 +17,7 @@ import java.lang.reflect.Field;
  */
 public class HideFieldFormatter implements FieldFormatter {
     @Override
-    public void initialize(Field field) {
+    public void init(Field field) {
     }
 
     @Override

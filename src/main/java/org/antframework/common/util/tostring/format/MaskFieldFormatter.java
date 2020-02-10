@@ -39,7 +39,7 @@ public class MaskFieldFormatter implements FieldFormatter {
     private char maskChar;
 
     @Override
-    public void initialize(Field field) {
+    public void init(Field field) {
         Mask maskAnnotation = AnnotatedElementUtils.findMergedAnnotation(field, Mask.class);
         Assert.isAssignable(CharSequence.class, field.getType(), String.format("@Mask只能标注在CharSequence类型字段上，字段[%s]不是CharSequence类型", field));
         Assert.isTrue(maskAnnotation.startSize() >= 0 && maskAnnotation.endSize() >= 0, String.format("属性[%s]的@Mask注解设置不合法：startSize、endSize不能小于0", field));
