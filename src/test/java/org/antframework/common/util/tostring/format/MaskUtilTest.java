@@ -16,9 +16,9 @@ import org.junit.Test;
 public class MaskUtilTest {
 
     @Test
-    public void testMask(){
-        String str="15922809178";
-        System.out.println(MaskUtils.mask(str,0,120));
+    public void testMask() {
+        String str = "15922952731";
+        System.out.println(MaskUtils.mask(str, 0, 120));
     }
 
 }
