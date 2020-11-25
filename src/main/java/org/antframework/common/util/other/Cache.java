@@ -10,6 +10,8 @@ package org.antframework.common.util.other;
 
 import lombok.AllArgsConstructor;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -51,7 +53,7 @@ public class Cache<K, V> {
      * @return 缓存中所有的key
      */
     public Set<K> getAllKeys() {
-        return map.keySet();
+        return Collections.unmodifiableSet(new HashSet<>(map.keySet()));
     }
 
     /**
