@@ -29,19 +29,30 @@ public final class ToString {
     // null字符串
     private static final String NULL_STRING = "null";
     // 正在被解析对象的持有器（用于检查循环引用）
-    private static final ThreadLocal<Set<Object>> APPENDING_OBJS_HOLDER = new ThreadLocal<>();
+    private static final ThreadLocal<Set<Object>> APPENDING_OBJS_HOLDER = ThreadLocal.withInitial(HashSet::new);
     // 内部附加器（通过反射解析对象内部字段）
     private static final Appender INNER_APPENDER = new InnerAppender();
     // 优先附加器（优先使用本list中的附加器解析对象）
     private static final List<Appender> PRIOR_APPENDERS;
+    // AnnotatedElementUtils是否存在
+    private static final boolean IS_PRESENT_ANNOTATED_ELEMENT_UTILS;
 
     static {
+        // 初始化INNER_APPENDER
         PRIOR_APPENDERS = new ArrayList<>();
         PRIOR_APPENDERS.add(new CharSequenceAppender());
         PRIOR_APPENDERS.add(new DateAppender());
         PRIOR_APPENDERS.add(new CollectionAppender());
         PRIOR_APPENDERS.add(new MapAppender());
         PRIOR_APPENDERS.add(new ArrayAppender());
+        // 初始化IS_PRESENT_ANNOTATED_ELEMENT_UTILS
+        boolean isPresent = true;
+        try {
+            org.apache.commons.lang3.ClassUtils.getClass("org.springframework.core.annotation.AnnotatedElementUtils");
+        } catch (ClassNotFoundException e) {
+            isPresent = false;
+        }
+        IS_PRESENT_ANNOTATED_ELEMENT_UTILS = isPresent;
     }
 
     /**
@@ -53,8 +64,8 @@ public final class ToString {
      * @return 转换得到的字符串
      */
     public static String toString(Object obj) {
-        if (APPENDING_OBJS_HOLDER.get() == null) {
-            APPENDING_OBJS_HOLDER.set(new HashSet<>());
+        if (!IS_PRESENT_ANNOTATED_ELEMENT_UTILS) {
+            return "无法获取内容（无spring-core或spring-core版本较低，请引入spring-core v4.2及以上版本，方可获取内容）";
         }
 
         StringBuilder builder = new StringBuilder();
