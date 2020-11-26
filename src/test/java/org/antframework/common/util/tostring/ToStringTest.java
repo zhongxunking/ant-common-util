@@ -54,7 +54,7 @@ public class ToStringTest {
         int count = 10;
         long startTime = System.currentTimeMillis();
         for (int i = 0; i < count; i++) {
-            String str = ToString.toString(user);
+            String str = user.toString();
             System.out.println(str);
         }
         long costTime = System.currentTimeMillis() - startTime;
@@ -103,6 +103,8 @@ public class ToStringTest {
         @HideDetail
         private Map<String, Object> map;
 
+        private User user = this;
+
         public User(long id0, long id1, long amount, String name, int age, Date birthDay, String password, String fixMaskSize, String certNo, String mobileNo, String email, String bankCardNo, String organizationCode, String unrecognize, String[] arr0, String[] arr1, String[] arr, List<String> col, Map<String, Object> map) {
             super(id0, id1, amount);
             this.name = name;
@@ -121,6 +123,11 @@ public class ToStringTest {
             this.arr = arr;
             this.col = col;
             this.map = map;
+        }
+
+        @Override
+        public String toString() {
+            return ToString.toString(this);
         }
     }
 }
