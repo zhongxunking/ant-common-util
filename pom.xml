@@ -31,20 +31,6 @@
             <artifactId>spring-core</artifactId>
             <scope>provided</scope>
         </dependency>
-        <!--jpa-api-->
-        <dependency>
-            <groupId>javax.persistence</groupId>
-            <artifactId>javax.persistence-api</artifactId>
-            <scope>provided</scope>
-            <optional>true</optional>
-        </dependency>
-        <!--spring-boot-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-autoconfigure</artifactId>
-            <scope>provided</scope>
-            <optional>true</optional>
-        </dependency>
         <!--spring-data-->
         <dependency>
             <groupId>org.springframework.data</groupId>
@@ -73,22 +59,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-    </licenses>
-    <developers>
-        <developer>
-            <name>zhongxun</name>
-            <email>zhongxunking@163.com</email>
-        </developer>
-    </developers>
-    <scm>
-        <connection>scm:git@github.com:zhongxunking/ant-common-util.git</connection>
-        <developerConnection>scm:git@github.com:zhongxunking/ant-common-util.git</developerConnection>
-        <url>git@github.com:zhongxunking/ant-common-util.git</url>
-    </scm>
 </project>
