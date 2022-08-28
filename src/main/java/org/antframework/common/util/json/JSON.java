@@ -1,4 +1,4 @@
-/* 
+/*
  * 作者：钟勋 (email:zhongxunking@163.com)
  */
 
@@ -20,7 +20,7 @@ import java.util.TimeZone;
  */
 public class JSON {
     /**
-     * jsckson
+     * Jackson
      */
     public static final ObjectMapper OBJECT_MAPPER;
 
@@ -28,8 +28,9 @@ public class JSON {
         OBJECT_MAPPER = new ObjectMapper();
         OBJECT_MAPPER.setTimeZone(TimeZone.getDefault());
         OBJECT_MAPPER.setLocale(Locale.getDefault());
-        OBJECT_MAPPER.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         OBJECT_MAPPER.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         OBJECT_MAPPER.disable(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS);
+        OBJECT_MAPPER.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        OBJECT_MAPPER.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     }
 }
