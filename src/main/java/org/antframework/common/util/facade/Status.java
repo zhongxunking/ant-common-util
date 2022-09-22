@@ -1,4 +1,4 @@
-/* 
+/*
  * 作者：钟勋 (e-mail:zhongxunking@163.com)
  */
 
@@ -25,5 +25,10 @@ public enum Status {
     /**
      * 处理中
      */
-    PROCESSING,;
+    PROCESSING,
+
+    /**
+     * 未知
+     */
+    UNKNOWN;
 }
