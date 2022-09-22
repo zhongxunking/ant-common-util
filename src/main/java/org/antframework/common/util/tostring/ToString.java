@@ -1,4 +1,4 @@
-/* 
+/*
  * 作者：钟勋 (e-mail:zhongxunking@163.com)
  */
 
@@ -267,7 +267,7 @@ public final class ToString {
                     FieldFormat formatAnnotation = AnnotatedElementUtils.findMergedAnnotation(field, FieldFormat.class);
                     if (formatAnnotation != null) {
                         // 初始化formatter
-                        FieldFormatter formatter = (FieldFormatter) ReflectUtils.newInstance(formatAnnotation.formattedBy());
+                        FieldFormatter formatter = (FieldFormatter) ReflectUtils.newInstance(formatAnnotation.formatter());
                         formatter.init(field);
                         formatterMap.put(field, formatter);
                     }
