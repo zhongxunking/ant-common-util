@@ -1,4 +1,4 @@
-/* 
+/*
  * 作者：钟勋 (e-mail:zhongxunking@163.com)
  */
 
@@ -9,7 +9,7 @@
 package org.antframework.common.util.tostring;
 
 import lombok.AllArgsConstructor;
-import org.antframework.common.util.other.Cache;
+import org.antframework.common.util.kit.Cache;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.cglib.core.ReflectUtils;
 import org.springframework.core.annotation.AnnotatedElementUtils;
@@ -267,7 +267,7 @@ public final class ToString {
                     FieldFormat formatAnnotation = AnnotatedElementUtils.findMergedAnnotation(field, FieldFormat.class);
                     if (formatAnnotation != null) {
                         // 初始化formatter
-                        FieldFormatter formatter = (FieldFormatter) ReflectUtils.newInstance(formatAnnotation.formattedBy());
+                        FieldFormatter formatter = (FieldFormatter) ReflectUtils.newInstance(formatAnnotation.formatter());
                         formatter.init(field);
                         formatterMap.put(field, formatter);
                     }

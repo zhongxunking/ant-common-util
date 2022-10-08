@@ -1,4 +1,4 @@
-/* 
+/*
  * 作者：钟勋 (e-mail:zhongxunking@163.com)
  */
 
@@ -10,7 +10,7 @@ package org.antframework.common.util.facade;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.antframework.common.util.tostring.format.HideDetail;
+import org.antframework.common.util.tostring.hidedetail.HideDetail;
 
 import java.io.Serializable;
 import java.util.ArrayList;

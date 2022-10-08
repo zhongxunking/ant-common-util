@@ -1,4 +1,4 @@
-/* 
+/*
  * 作者：钟勋 (e-mail:zhongxunking@163.com)
  */
 
@@ -6,7 +6,7 @@
  * 修订记录:
  * @author 钟勋 2017-10-31 20:06 创建
  */
-package org.antframework.common.util.other;
+package org.antframework.common.util.kit;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

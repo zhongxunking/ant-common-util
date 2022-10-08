@@ -1,4 +1,4 @@
-/* 
+/*
  * 作者：钟勋 (e-mail:zhongxunking@163.com)
  */
 
@@ -8,6 +8,7 @@
  */
 package org.antframework.common.util.tostring.format;
 
+import org.antframework.common.util.tostring.mask.MaskUtils;
 import org.junit.Test;
 
 /**

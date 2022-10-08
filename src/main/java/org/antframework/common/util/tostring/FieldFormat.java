@@ -1,4 +1,4 @@
-/* 
+/*
  * 作者：钟勋 (e-mail:zhongxunking@163.com)
  */
 
@@ -18,7 +18,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FieldFormat {
     /**
-     * 指定格式化器
+     * 格式化器
      */
-    Class<? extends FieldFormatter> formattedBy();
+    Class<? extends FieldFormatter> formatter();
 }

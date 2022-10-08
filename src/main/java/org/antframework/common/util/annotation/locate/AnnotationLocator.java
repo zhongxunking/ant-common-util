@@ -8,7 +8,7 @@
  */
 package org.antframework.common.util.annotation.locate;
 
-import org.antframework.common.util.other.Cache;
+import org.antframework.common.util.kit.Cache;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
