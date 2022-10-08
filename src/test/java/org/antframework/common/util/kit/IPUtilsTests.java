@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * ip工具类单元测试
  */
-public class IPUtilesTests {
+public class IPUtilsTests {
 
     @Test
     public void testGetIPV4() {
