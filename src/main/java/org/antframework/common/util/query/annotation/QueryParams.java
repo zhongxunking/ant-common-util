@@ -1,4 +1,4 @@
-/* 
+/*
  * 作者：钟勋 (e-mail:zhongxunking@163.com)
  */
 
@@ -9,7 +9,7 @@
 package org.antframework.common.util.query.annotation;
 
 import lombok.AllArgsConstructor;
-import org.antframework.common.util.other.Cache;
+import org.antframework.common.util.kit.Cache;
 import org.antframework.common.util.query.QueryParam;
 import org.springframework.cglib.core.ReflectUtils;
 import org.springframework.core.annotation.AnnotatedElementUtils;

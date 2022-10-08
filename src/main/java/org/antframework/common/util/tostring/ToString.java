@@ -9,7 +9,7 @@
 package org.antframework.common.util.tostring;
 
 import lombok.AllArgsConstructor;
-import org.antframework.common.util.other.Cache;
+import org.antframework.common.util.kit.Cache;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.cglib.core.ReflectUtils;
 import org.springframework.core.annotation.AnnotatedElementUtils;

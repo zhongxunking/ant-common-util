@@ -8,7 +8,7 @@
  */
 package org.antframework.common.util.tostring.mask;
 
-import org.antframework.common.util.other.Cache;
+import org.antframework.common.util.kit.Cache;
 import org.antframework.common.util.tostring.FieldFormatter;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.util.Assert;
