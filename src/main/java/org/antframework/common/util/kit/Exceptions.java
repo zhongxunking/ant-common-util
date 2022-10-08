@@ -6,7 +6,7 @@
  * 修订记录:
  * @author 钟勋 2022-07-23 11:39 创建
  */
-package org.antframework.common.util.other;
+package org.antframework.common.util.kit;
 
 import java.util.concurrent.Callable;
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * 作者：钟勋 (email:zhongxunking@163.com)
  */
 
@@ -6,7 +6,7 @@
  * 修订记录:
  * @author 钟勋 2020-03-31 20:36 创建
  */
-package org.antframework.common.util.other;
+package org.antframework.common.util.kit;
 
 /**
  * 限速器
