@@ -51,7 +51,7 @@ public class AnnotationLocatorTest {
         long startTime = System.currentTimeMillis();
         int count = 1000000;
         for (int i = 0; i < count; i++) {
-            List<Position<Tag>> positions = AnnotationLocator.locate(product, Tag.class, new AnnotationLocator.TypeFieldPredicate(String.class));
+            List<AnnotationLocator.Position<Tag>> positions = AnnotationLocator.locate(product, Tag.class, new AnnotationLocator.TypeFieldPredicate(String.class));
             Assert.assertEquals(6, positions.size());
         }
         long timeCost = System.currentTimeMillis() - startTime;

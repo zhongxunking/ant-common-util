@@ -8,6 +8,8 @@
  */
 package org.antframework.common.util.annotation.locate;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.antframework.common.util.kit.Cache;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.util.Assert;
@@ -189,6 +191,34 @@ public final class AnnotationLocator {
 
                 return fieldAMap;
             }
+        }
+    }
+
+    /**
+     * 位置
+     */
+    @AllArgsConstructor
+    @Getter
+    public static class Position<A extends Annotation> {
+        // 被注解标记的对象
+        private final Object target;
+        // 被注解标记的字段
+        private final Field field;
+        // 注解
+        private final A annotation;
+
+        /**
+         * 获取被注解标记字段的值
+         */
+        public <T> T getFieldValue() {
+            return (T) ReflectionUtils.getField(field, target);
+        }
+
+        /**
+         * 设置被注解标记的字段的值
+         */
+        public void setFieldValue(Object newValue) {
+            ReflectionUtils.setField(field, target, newValue);
         }
     }
 
