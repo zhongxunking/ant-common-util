@@ -8,6 +8,7 @@
  */
 package org.antframework.common.util.annotation.locate;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.antframework.common.util.kit.Cache;
@@ -155,15 +156,12 @@ public final class AnnotationLocator {
         }
 
         // 执行器
+        @AllArgsConstructor(access = AccessLevel.PACKAGE)
         private static class InnerAppenderExecutor<A extends Annotation> {
             // 注解与对应的字段缓存
             private final Cache<Class<A>, Map<Field, A>> cache = new Cache<>(this::parse);
             // 被反射解析的类型
             private final Class<?> targetClass;
-
-            InnerAppenderExecutor(Class<?> targetClass) {
-                this.targetClass = targetClass;
-            }
 
             // 执行
             void execute(List<Position<A>> positions, Object obj, Class<A> aType, Predicate<Field> fieldPredicate) {
