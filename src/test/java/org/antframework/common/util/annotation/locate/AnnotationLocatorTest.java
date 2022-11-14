@@ -1,4 +1,4 @@
-/* 
+/*
  * 作者：钟勋 (e-mail:zhongxunking@163.com)
  */
 
@@ -8,6 +8,8 @@
  */
 package org.antframework.common.util.annotation.locate;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -46,13 +48,14 @@ public class AnnotationLocatorTest {
         product.setDescription("包含很多小零食");
         product.setAmount(1000);
         product.setGoodsList(goodsList);
+        product.setGoodses(goodsList.toArray(new Goods[0]));
 
         AnnotationLocator.locate(product, Tag.class, new AnnotationLocator.TypeFieldPredicate(String.class));
         long startTime = System.currentTimeMillis();
         int count = 1000000;
         for (int i = 0; i < count; i++) {
             List<AnnotationLocator.Position<Tag>> positions = AnnotationLocator.locate(product, Tag.class, new AnnotationLocator.TypeFieldPredicate(String.class));
-            Assert.assertEquals(6, positions.size());
+            Assert.assertEquals(10, positions.size());
         }
         long timeCost = System.currentTimeMillis() - startTime;
         System.out.println("AnnotationLocator性能：");
@@ -66,6 +69,8 @@ public class AnnotationLocatorTest {
     private @interface Tag {
     }
 
+    @Getter
+    @Setter
     private static class Product {
         private String productId;
         @Tag
@@ -78,48 +83,12 @@ public class AnnotationLocatorTest {
         private int amount;
         @Tag
         private List<Goods> goodsList;
-
-        public String getProductId() {
-            return productId;
-        }
-
-        public void setProductId(String productId) {
-            this.productId = productId;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public int getAmount() {
-            return amount;
-        }
-
-        public void setAmount(int amount) {
-            this.amount = amount;
-        }
-
-        public List<Goods> getGoodsList() {
-            return goodsList;
-        }
-
-        public void setGoodsList(List<Goods> goodsList) {
-            this.goodsList = goodsList;
-        }
+        @Tag
+        private Goods[] goodses;
     }
 
+    @Getter
+    @Setter
     private static class Goods {
         private String goodsId;
         @Tag
@@ -128,37 +97,5 @@ public class AnnotationLocatorTest {
         private String description;
         @Tag
         private Object obj;
-
-        public String getGoodsId() {
-            return goodsId;
-        }
-
-        public void setGoodsId(String goodsId) {
-            this.goodsId = goodsId;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public Object getObj() {
-            return obj;
-        }
-
-        public void setObj(Object obj) {
-            this.obj = obj;
-        }
     }
 }
