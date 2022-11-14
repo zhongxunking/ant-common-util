@@ -1,4 +1,4 @@
-/* 
+/*
  * 作者：钟勋 (e-mail:zhongxunking@163.com)
  */
 
@@ -26,14 +26,14 @@ public final class AnnotationLocator {
     // 正在被解析对象的持有器（用于检查循环引用）
     private static final ThreadLocal<Set<Object>> APPENDING_OBJS_HOLDER = new ThreadLocal<>();
     // 附加器
-    private static final List<Appender> APPENDERS;
+    private static final List<Appender<? extends Annotation>> APPENDERS;
 
     static {
         APPENDERS = new ArrayList<>();
-        APPENDERS.add(new CollectionAppender());
-        APPENDERS.add(new ArrayAppender());
-        APPENDERS.add(new MapAppender());
-        APPENDERS.add(new InnerAppender());
+        APPENDERS.add(new CollectionAppender<>());
+        APPENDERS.add(new ArrayAppender<>());
+        APPENDERS.add(new MapAppender<>());
+        APPENDERS.add(new InnerAppender<>());
     }
 
     /**
@@ -75,9 +75,9 @@ public final class AnnotationLocator {
 
     // 选择附加器
     private static <A extends Annotation> Appender<A> chooseAppender(Object obj) {
-        for (Appender appender : APPENDERS) {
+        for (Appender<?> appender : APPENDERS) {
             if (appender.canAppend(obj)) {
-                return appender;
+                return (Appender<A>) appender;
             }
         }
         throw new IllegalStateException(String.format("未找到对象[%s]对应的appender", obj));
@@ -101,7 +101,7 @@ public final class AnnotationLocator {
 
         @Override
         public void append(List<Position<A>> positions, Object collection, Class<A> aType, Predicate<Field> fieldPredicate) {
-            for (Object obj : (Collection) collection) {
+            for (Object obj : (Collection<?>) collection) {
                 AnnotationLocator.append(positions, obj, aType, fieldPredicate);
             }
         }
@@ -131,7 +131,7 @@ public final class AnnotationLocator {
 
         @Override
         public void append(List<Position<A>> positions, Object map, Class<A> aType, Predicate<Field> fieldPredicate) {
-            for (Object obj : ((Map) map).values()) {
+            for (Object obj : ((Map<?, ?>) map).values()) {
                 AnnotationLocator.append(positions, obj, aType, fieldPredicate);
             }
         }
@@ -140,7 +140,7 @@ public final class AnnotationLocator {
     // 反射解析对象内部属性的附加器
     private static class InnerAppender<A extends Annotation> implements Appender<A> {
         // 执行器缓存
-        private final Cache<Class, InnerAppenderExecutor<A>> cache = new Cache<>(InnerAppenderExecutor::new);
+        private final Cache<Class<?>, InnerAppenderExecutor<A>> cache = new Cache<>(InnerAppenderExecutor::new);
 
         @Override
         public boolean canAppend(Object obj) {
@@ -157,9 +157,9 @@ public final class AnnotationLocator {
             // 注解与对应的字段缓存
             private final Cache<Class<A>, Map<Field, A>> cache = new Cache<>(this::parse);
             // 被反射解析的类型
-            private final Class targetClass;
+            private final Class<?> targetClass;
 
-            InnerAppenderExecutor(Class targetClass) {
+            InnerAppenderExecutor(Class<?> targetClass) {
                 this.targetClass = targetClass;
             }
 
@@ -197,14 +197,14 @@ public final class AnnotationLocator {
      */
     public static class TypeFieldPredicate implements Predicate<Field> {
         // 可接受的字段类型
-        private final Class[] types;
+        private final Class<?>[] types;
 
         /**
          * 构造字段断言器
          *
          * @param types 可接受的字段类型
          */
-        public TypeFieldPredicate(Class... types) {
+        public TypeFieldPredicate(Class<?>... types) {
             Assert.notEmpty(types, "可接受的字段类型不能为null，也不能为空");
             this.types = types;
         }
