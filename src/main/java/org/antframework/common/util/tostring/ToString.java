@@ -26,8 +26,6 @@ import java.util.*;
  * 将对象转换成字符串工具类
  */
 public final class ToString {
-    // null字符串
-    private static final String NULL_STRING = "null";
     // 正在被解析对象的持有器（用于检查循环引用）
     private static final ThreadLocal<Set<Object>> APPENDING_OBJS_HOLDER = ThreadLocal.withInitial(HashSet::new);
     // 内部附加器（通过反射解析对象内部字段）
@@ -104,11 +102,7 @@ public final class ToString {
     // 执行附加器
     private static void doAppender(Appender appender, StringBuilder builder, Object obj) {
         if (appender == null) {
-            if (obj == null) {
-                builder.append(NULL_STRING);
-            } else {
-                builder.append(obj.toString());
-            }
+            builder.append(obj);
             return;
         }
 
