@@ -8,7 +8,7 @@
  */
 package org.antframework.common.util.kit;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 /**
  * 可排序的实体中心
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SortableHub<T> {
     // 实体比较器
     private final Comparator<T> comparator;
