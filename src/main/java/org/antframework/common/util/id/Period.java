@@ -1,4 +1,4 @@
-/* 
+/*
  * 作者：钟勋 (e-mail:zhongxunking@163.com)
  */
 
@@ -71,6 +71,34 @@ public final class Period implements Comparable<Period>, Serializable {
         }
 
         return new Period(type, date);
+    }
+
+    /**
+     * 相减计算出周期差额
+     *
+     * @param other 另一个周期
+     * @return 周期差额
+     */
+    public int subtract(Period other) {
+        int sign = compareTo(other);
+        if (sign == 0) {
+            return 0;
+        }
+
+        Period min = sign < 0 ? this : other;
+        Period max = sign > 0 ? this : other;
+
+        int gap = 0;
+        Period anchor = min;
+        while (anchor.compareTo(max) < 0) {
+            gap++;
+            anchor = anchor.grow(1);
+        }
+
+        if (sign < 0) {
+            gap = -gap;
+        }
+        return gap;
     }
 
     @Override
