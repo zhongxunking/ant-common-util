@@ -61,6 +61,7 @@ public final class Exceptions {
     /**
      * 回调
      */
+    @FunctionalInterface
     public interface Callback {
         /**
          * 调用
